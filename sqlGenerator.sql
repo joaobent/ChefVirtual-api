@@ -59,6 +59,21 @@ CREATE TABLE PalavrasRestritas (
     nome VARCHAR(255)
 );
 
+CREATE TABLE imagensReceitas (
+	id int primary key AUTO_INCREMENT,
+    idReceita INT,
+    comentario TEXT,
+    FOREIGN KEY (idReceita) REFERENCES Receita(id)
+);
+
+CREATE TABLE imagensUsuarios(
+	id int primary key AUTO_INCREMENT,
+    idUsuario INT,
+    imagem LONGTEXT,
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(id)
+);
+
+
 ALTER TABLE Nivel
 ADD CONSTRAINT fk_nivel_usuario FOREIGN KEY (idUsuario) REFERENCES Usuario(id);
 
