@@ -21,5 +21,9 @@
     "url": "https://github.com/joaobent/ChefVirtual-api/issues"
   },
   "homepage": "https://github.com/joaobent/ChefVirtual-api#readme",
-  "description": ""
-}
+  "description":{
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  }}
+
+
