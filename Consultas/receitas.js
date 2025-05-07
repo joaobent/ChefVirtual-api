@@ -20,6 +20,8 @@ async function GetAllReceitas() {
         const res = resQuery.map(r => ({
             tituloReceita: r.tituloReceita,
             imagemReceita: r.imagemReceita,
+            descricao: r.descricao,
+            favoritos: r.favoritos,
             usuario: {
                 id: r.idUsuario,
                 nome: r.nome,
