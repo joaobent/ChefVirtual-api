@@ -4,7 +4,11 @@ import {executaQuery} from '../Config/dbInstance.js'
 async function GetAllReceitas() {
     const conexao = await pool.getConnection()
     try{
-        const query = "SELECT * FROM Receita"
+        const query = 
+                    `SELECT Receita.*, Usuario.* 
+                    FROM Receita 
+                    INNER JOIN Usuario ON Receita.idUsuario = Usuario.id;
+                    `
         const res = executaQuery(conexao, query)
         return res;
     }
@@ -18,7 +22,7 @@ async function GetAllReceitas() {
     }
 }
 
-async function GetReceitasByName(name) {
+async function GetReceitasByTitle(name) {
     if (typeof name !== 'string')
         return
 
@@ -43,4 +47,28 @@ async function GetReceitasByName(name) {
     }
 }
 
-export {GetAllReceitas, GetReceitasByName}
+async function GetReceitasByUser(userId) {
+    if (typeof userId !== 'number')
+        return
+
+    const conexao = await pool.getConnection()
+    try{
+        const query = 
+                    `SELECT r.nome, ir.imagem, u.nome
+                    FROM Receita AS r
+                    INNER JOIN imagensReceitas AS ir ON r.id = ir.idReceita
+                    INNER JOIN Usuario as u ON r.idUsuario = u.id
+                    `;
+
+        const res = executaQuery(conexao, query)
+        return res;
+    }
+    catch (ex){
+        console.log(ex)
+    }
+    finally{
+        conexao.release()
+    }
+}
+
+export {GetAllReceitas, GetReceitasByTitle, GetReceitasByUser}
