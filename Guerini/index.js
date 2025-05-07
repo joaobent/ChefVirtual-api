@@ -4,7 +4,7 @@ import { GetReceitasByName, padrao } from './servicos/consultas.js'
 const app = express();
 
 app.get('/teste', async(req, res) =>{
-    const teste = await padrao()
+    const teste = await Receitac
     res.json(teste)
 })
 
