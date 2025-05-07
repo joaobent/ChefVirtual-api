@@ -4,7 +4,7 @@ const pool = mysql.createPool(
     {
         host: 'localhost',
         user: 'root',
-        password: 'Suporte99',
+        password: 'TESTE',
         database: 'fslab'
     }
 )

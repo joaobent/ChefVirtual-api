@@ -65,7 +65,7 @@ CREATE TABLE PalavrasRestritas (
 CREATE TABLE imagensReceitas (
 	id int primary key AUTO_INCREMENT,
     idReceita INT,
-    comentario TEXT,
+    imagem LONGTEXT,
     FOREIGN KEY (idReceita) REFERENCES Receita(id)
 );
 
@@ -137,7 +137,7 @@ INSERT INTO PalavrasRestritas (nome) VALUES
 ('porra');
 
 -- Inserir imagens de receitas (URLs de pizza) //TODO - DEPOIS SERÁ O BYTE DA IMAGEM
-INSERT INTO imagensReceitascategoria (idReceita, comentario) VALUES 
+INSERT INTO imagensReceitas (idReceita, imagem) VALUES 
 (1, 'https://www.guiadacozinha.com.br/wp-content/uploads/2020/03/pizza-de-calabresa.jpg'),
 (2, 'https://static.itdg.com.br/images/1200-630/72b6a4263d90d1379e27c4c24d2f682a/pizza-de-mussarela.jpg'),
 (3, 'https://img.freepik.com/fotos-premium/pizza-de-queijo-fatiada-na-tabua-de-madeira_93675-133258.jpg');
