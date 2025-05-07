@@ -5,11 +5,33 @@ async function GetAllReceitas() {
     const conexao = await pool.getConnection()
     try{
         const query = 
-                    `SELECT Receita.*, Usuario.* 
-                    FROM Receita 
-                    INNER JOIN Usuario ON Receita.idUsuario = Usuario.id;
                     `
-        const res = executaQuery(conexao, query)
+                    SELECT 
+                        r.*, 
+                        u.*, 
+                        ir.imagem as imagemReceita, 
+                        iu.imagem as imagemUsuario
+                    FROM Receita AS r
+                    INNER JOIN imagensReceitas AS ir ON r.id = ir.idReceita
+                    INNER JOIN Usuario AS u ON r.idUsuario = u.id
+                    INNER JOIN imagensUsuarios as iu ON u.id = iu.idUsuario;
+                    `
+        const resQuery = await executaQuery(conexao, query)
+        const res = resQuery.map(r => ({
+            tituloReceita: r.tituloReceita,
+            imagemReceita: r.imagemReceita,
+            usuario: {
+                id: r.idUsuario,
+                nome: r.nome,
+                email: r.email,
+                idade: r.idade,
+                facebook: r.facebook,
+                instagram: r.instagram,
+                youtube: r.youtube,
+                imagemUsuario: r.imagemUsuario
+            }
+        }))
+
         return res;
     }
     catch (ex)
