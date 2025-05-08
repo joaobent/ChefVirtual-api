@@ -7,7 +7,7 @@ const puxarDados = async () => {
     try {
         const [rows] = await pool.query(query);
         const [rows2] = await pool.query(query2);
-        return rows, rows2; // Retorna os dados obtidos da consulta
+        return { receitas: rows, ingredientes: rows2 }; // Retorna os dados obtidos
 
     } catch (error) {
         console.error('Erro ao executar a consulta:', error);
