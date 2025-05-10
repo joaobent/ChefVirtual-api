@@ -3,8 +3,6 @@ import receitasRotas from '../Rotas/receitasRotas.js'
 import categoriaRotas from '../Rotas/categoriaRotas.js'
 import comentariosRotas from '../Rotas/comentariosRotas.js'
 import favoritoRotas from '../Rotas/favoritoRotas.js'
-import imagensReceitasRotas from '../Rotas/imagensReceitasRotas.js'
-import imagensUsuariosRotas from '../Rotas/imagensUsuariosRotas.js'
 import loginRotas from '../Rotas/loginRotas,.js'
 import nivelRotas from '../Rotas/nivelRotas.js'
 
@@ -16,8 +14,6 @@ app.use('/api', receitasRotas); // prefixa as rotas das receitas com /api
 app.use('/api', categoriaRotas);
 app.use('/api', comentariosRotas);
 app.use('/api', favoritoRotas);
-app.use('/api', imagensReceitasRotas);
-app.use('/api', imagensUsuariosRotas);
 app.use('/api', loginRotas);
 app.use('/api', nivelRotas);
 
