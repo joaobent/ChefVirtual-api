@@ -1,5 +1,5 @@
 import {pool} from '../config/database.js'
-import {executaQuery} from '../Config/dbInstance.js'
+import {executaQuery} from '../config/dbInstance.js'
 
 async function GetAllReceitas() {
     const conexao = await pool.getConnection()
