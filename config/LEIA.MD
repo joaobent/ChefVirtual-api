@@ -19,3 +19,21 @@ export default pool;
 Ele deve ser criado para fazer a SUA CONEXAO com seu DB local.
 
 IMPORTANTE: NÃO ESQUECA DE ADICIONAR O ARQUIVO NO .gitignore CASO AINDA NÃO ESTEJA.
+
+Conexão do ava
+
+import mysql from 'mysql2/promise'
+
+const pool = mysql.createPool(
+    {
+        host: 'localhost', 
+        user: 'chefvirtual',
+        port: 20002,
+        password: '12345678',
+        database: 'chefvirtual_db',
+        waitForConnections: true,
+    }
+)
+
+
+export default pool;
