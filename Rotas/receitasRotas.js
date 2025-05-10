@@ -1,5 +1,5 @@
 import express from 'express';
-import { getReceitas, getReceitasByTitle, getReceitasByUser, patchReceitas } from '../Controllers/receitasController.js';
+import { getReceitas, getReceitasByTitle, getReceitasByUser, patchReceitas } from '../controllers/receitasController.js';
 
 const router = express.Router();
 router.get('/Receitas', getReceitas); // GET - Retorna todas as receitas
