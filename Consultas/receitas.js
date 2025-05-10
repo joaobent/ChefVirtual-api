@@ -1,4 +1,4 @@
-import {pool} from '../Config/database.js'
+import {pool} from '../config/database.js'
 import {executaQuery} from '../Config/dbInstance.js'
 
 async function GetAllReceitas() {
