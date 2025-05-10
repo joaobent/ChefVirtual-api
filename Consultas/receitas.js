@@ -95,4 +95,33 @@ async function GetReceitasByUser(userId) {
     }
 }
 
-export {GetAllReceitas, GetReceitasByTitle, GetReceitasByUser}
+async function UpdateReceitasPartial(userId, dados) {
+    if (typeof userId !== 'number')
+        return
+
+    const conexao = await pool.getConnection()
+    try{
+        const campos = Object.keys(dados).map(campo => `${campo} = ?`).join(', ');
+        const valores = Object.values(dados);
+
+        console.log(`Campos: ${campos}`)
+        console.log(`Valores: ${valores}`)
+
+        const query = `UPDATE Receita SET ${campos} WHERE id = ?`;
+        await executaQuery(conexao, query, [...valores, userId]);
+
+        const res = executaQuery(conexao, query)
+        return res;
+    }
+    catch (ex){
+        console.log(ex)
+    }
+    finally{
+        conexao.release()
+    }
+}
+
+export {
+    GetAllReceitas, GetReceitasByTitle, GetReceitasByUser,
+    UpdateReceitasPartial
+}

@@ -1,4 +1,4 @@
-import {GetAllReceitas, GetReceitasByTitle, GetReceitasByUser} from '../Consultas/receitas.js'
+import {GetAllReceitas, GetReceitasByTitle, GetReceitasByUser, UpdateReceitasPartial} from '../Consultas/receitas.js'
 
 export async function getReceitas(req, res) {
   try {
@@ -21,8 +21,8 @@ export async function getReceitasByTitle(req, res) {
 }
 
 export async function getReceitasByUser(req, res) {
-  const {idUsuario} = req.query;
-  
+  const {idUsuario} = req.params;
+
   try{
     const receitas = await GetReceitasByUser(idUsuario)
     res.json(receitas)
@@ -30,4 +30,24 @@ export async function getReceitasByUser(req, res) {
   catch (error){
     res.status(500).json({erro: 'Erro na busca por usuario', error})
   }
+}
+
+export async function patchReceitas(req, res) {
+  const {idUsuario} = req.params;
+  const dados = req.body;
+
+  if (dados.lenght <= 0){
+    res.status()
+  }
+
+  try
+  {
+    await UpdateReceitasPartial(idUsuario, dados)
+    res.status(200).json({ mensagem: 'Receita atualizada com sucesso!' })
+  }
+  catch (error)
+  {
+    res.status(500).json({erro: 'Erro na busca por usuario', error})
+  }
+
 }
