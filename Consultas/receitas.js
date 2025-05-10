@@ -8,13 +8,9 @@ async function GetAllReceitas() {
                     `
                     SELECT 
                         r.*, 
-                        u.*, 
-                        ir.imagem as imagemReceita, 
-                        iu.imagem as imagemUsuario
-                    FROM Receita AS r
-                    INNER JOIN imagensReceitas AS ir ON r.id = ir.idReceita
-                    INNER JOIN Usuario AS u ON r.idUsuario = u.id
-                    INNER JOIN imagensUsuarios as iu ON u.id = iu.idUsuario;
+                        u.*
+                    FROM receita AS r
+                    INNER JOIN usuario AS u ON r.usuario_id = u.id
                     `
         const resQuery = await executaQuery(conexao, query)
         const res = resQuery.map(r => ({
@@ -23,7 +19,7 @@ async function GetAllReceitas() {
             descricao: r.descricao,
             favoritos: r.favoritos,
             usuario: {
-                id: r.idUsuario,
+                id: r.usuario_id,
                 nome: r.nome,
                 email: r.email,
                 idade: r.idade,
@@ -53,9 +49,8 @@ async function GetReceitasByTitle(name) {
     const conexao = await pool.getConnection()
     try{
         const query = 
-                    `SELECT r.nome, ir.imagem
-                    FROM Receita AS r
-                    INNER JOIN imagensReceitas AS ir ON r.id = ir.idReceita
+                    `SELECT r.nome
+                    FROM receita AS r
                     WHERE r.nome LIKE ?
                     `;
 
@@ -78,10 +73,9 @@ async function GetReceitasByUser(userId) {
     const conexao = await pool.getConnection()
     try{
         const query = 
-                    `SELECT r.nome, ir.imagem, u.nome
-                    FROM Receita AS r
-                    INNER JOIN imagensReceitas AS ir ON r.id = ir.idReceita
-                    INNER JOIN Usuario as u ON r.idUsuario = u.id
+                    `SELECT r.nome, u.nome
+                    FROM receita AS r
+                    INNER JOIN usuario as u ON r.usuario_id = u.id
                     `;
 
         const res = executaQuery(conexao, query)
