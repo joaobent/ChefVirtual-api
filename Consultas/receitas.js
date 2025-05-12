@@ -1,16 +1,24 @@
 import pool from '../config/conexao.js'
-import {executaQuery} from '../config/dbInstance.js'
+import { executaQuery } from '../config/dbInstance.js'
 
 async function GetAllReceitas() {
     const conexao = await pool.getConnection()
-    try{
-        const query = 
-                    `
+    try {
+        const query =
+            `
                     SELECT 
                         r.*, 
-                        u.id, u.nome, u.email, u.facebook, u.instagram, u.youtube, u.imagem AS imagemUsuario
+                        u.id, u.nome, u.email, u.facebook, u.instagram, u.youtube, u.imagem AS imagemUsuario,
+
+                        e.id AS etapaId,
+                        e.numeroEtapa,
+                        e.descricao AS etapaDescricao
+                        
+                        
                     FROM receita AS r
                     INNER JOIN usuario AS u ON r.usuario_id = u.id
+                    INNER JOIN etapa AS e ON r.id = e.receita_id
+                    ORDER BY r.id DESC
                     `
         const resQuery = await executaQuery(conexao, query)
         const res = resQuery.map(r => ({
@@ -21,24 +29,22 @@ async function GetAllReceitas() {
             usuario: {
                 id: r.id,
                 nome: r.nome,
-                email: r.email,
-                idade: r.idade,
-                facebook: r.facebook,
-                instagram: r.instagram,
-                youtube: r.youtube,
-                imagemUsuario: r.imagemUsuario
+            },
+            etapas: {
+                id: r.etapaId,
+                numeroEtapa: r.numeroEtapa,
+                descricao: r.etapaDescricao
             }
+
         }))
         console.log(res)
 
         return res;
     }
-    catch (ex)
-    {
+    catch (ex) {
         console.log(ex)
     }
-    finally
-    {
+    finally {
         conexao.release()
     }
 }
@@ -48,21 +54,21 @@ async function GetReceitasByTitle(name) {
         return
 
     const conexao = await pool.getConnection()
-    try{
-        const query = 
-                    `SELECT r.nome
+    try {
+        const query =
+            `SELECT r.nome
                     FROM receita AS r
                     WHERE r.nome LIKE ?
                     `;
 
         const search = `%${name}%`
-        const res = executaQuery(conexao, query, [search])
+        const res = await executaQuery(conexao, query, [search])
         return res;
     }
-    catch (ex){
+    catch (ex) {
         console.log(ex)
     }
-    finally{
+    finally {
         conexao.release()
     }
 }
@@ -72,9 +78,9 @@ async function GetReceitasByUser(userId) {
         return
 
     const conexao = await pool.getConnection()
-    try{
-        const query = 
-                    `SELECT r.nome, u.nome
+    try {
+        const query =
+            `SELECT r.nome, u.nome
                     FROM receita AS r
                     INNER JOIN usuario as u ON r.usuario_id = u.id
                     `;
@@ -82,10 +88,10 @@ async function GetReceitasByUser(userId) {
         const res = executaQuery(conexao, query)
         return res;
     }
-    catch (ex){
+    catch (ex) {
         console.log(ex)
     }
-    finally{
+    finally {
         conexao.release()
     }
 }
@@ -95,7 +101,7 @@ async function UpdateReceitasPartial(userId, dados) {
         return
 
     const conexao = await pool.getConnection()
-    try{
+    try {
         const campos = Object.keys(dados).map(campo => `${campo} = ?`).join(', ');
         const valores = Object.values(dados);
 
@@ -108,10 +114,10 @@ async function UpdateReceitasPartial(userId, dados) {
         const res = executaQuery(conexao, query)
         return res;
     }
-    catch (ex){
+    catch (ex) {
         console.log(ex)
     }
-    finally{
+    finally {
         conexao.release()
     }
 }
