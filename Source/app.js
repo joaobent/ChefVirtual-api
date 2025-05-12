@@ -5,6 +5,8 @@ import comentariosRotas from '../Rotas/comentariosRotas.js'
 import favoritoRotas from '../Rotas/favoritoRotas.js'
 import loginRotas from '../Rotas/loginRotas,.js'
 import nivelRotas from '../Rotas/nivelRotas.js'
+import usuarioRouter from '../Rotas/usuarioRotas.js'
+import loginRouter from '../Rotas/loginRotas,.js'
 
 const app = express();
 const PORT = 3000;
@@ -16,7 +18,9 @@ app.use('/api', comentariosRotas);
 app.use('/api', favoritoRotas);
 app.use('/api', loginRotas);
 app.use('/api', nivelRotas);
+app.use('/api', usuarioRouter)
+app.use('/api', loginRouter)
 
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+  console.log(`Servidor rodando em http://localhost:3000`);
 });

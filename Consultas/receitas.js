@@ -8,18 +8,18 @@ async function GetAllReceitas() {
                     `
                     SELECT 
                         r.*, 
-                        u.*
+                        u.id, u.nome, u.email, u.facebook, u.instagram, u.youtube, u.imagem AS imagemUsuario
                     FROM receita AS r
                     INNER JOIN usuario AS u ON r.usuario_id = u.id
                     `
         const resQuery = await executaQuery(conexao, query)
         const res = resQuery.map(r => ({
-            tituloReceita: r.tituloReceita,
-            imagemReceita: r.imagemReceita,
+            tituloReceita: r.titulo,
+            imagemReceita: r.imagem,
             descricao: r.descricao,
-            favoritos: r.favoritos,
+            //TODO: Fazer depos favoritos: r.favoritos,
             usuario: {
-                id: r.usuario_id,
+                id: r.id,
                 nome: r.nome,
                 email: r.email,
                 idade: r.idade,
@@ -29,6 +29,7 @@ async function GetAllReceitas() {
                 imagemUsuario: r.imagemUsuario
             }
         }))
+        console.log(res)
 
         return res;
     }
