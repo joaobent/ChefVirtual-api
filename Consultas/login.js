@@ -1,4 +1,4 @@
-import { pool } from '../config/database.js';
+import pool from '../config/conexao.js';
 import { executaQuery } from '../config/dbInstance.js';
 
 async function GetAllLogins() {

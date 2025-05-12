@@ -24,5 +24,7 @@
   "bugs": {
     "url": "https://github.com/joaobent/ChefVirtual-api/issues"
   },
-  "homepage": "https://github.com/joaobent/ChefVirtual-api#readme"
+  "homepage": "https://github.com/joaobent/ChefVirtual-api#readme",
+  "devDependencies": {},
+  "description": ""
 }
