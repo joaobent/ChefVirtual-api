@@ -16,7 +16,6 @@ app.use('/api', receitasRotas); // prefixa as rotas das receitas com /api
 app.use('/api', categoriaRotas);
 app.use('/api', comentariosRotas);
 app.use('/api', favoritoRotas);
-app.use('/api', loginRotas);
 app.use('/api', nivelRotas);
 app.use('/api', usuarioRouter)
 app.use('/api', loginRouter)

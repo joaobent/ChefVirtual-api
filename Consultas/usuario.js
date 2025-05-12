@@ -4,7 +4,7 @@ import { executaQuery } from '../config/dbInstance.js'
 async function GetAllUsuario() {
     const conexao = await pool.getConnection()
     try {
-        const query = `SELECT * FROM usuario;`;
+        const query = `SELECT usuario.id, usuario.nome, usuario.email, usuario.facebook, usuario.instagram, usuario.youtube, login.senha, codigo_verificacao.codigo_verificacao FROM usuario INNER JOIN login ON usuario.id = login.id_usuario INNER JOIN codigo_verificacao ON login.codigo_verificacao_id = codigo_verificacao.id;`;
         const resposta = await executaQuery(conexao, query)
         const res = resposta.map(usuario => ({
             id: usuario.id,
@@ -13,7 +13,8 @@ async function GetAllUsuario() {
             facebook: usuario.facebook,
             instagram: usuario.instagram,
             youtube: usuario.youtube,
-            imagemUsuario: usuario.imagemUsuario
+            senha: usuario.senha,
+            codigoVerificacao: usuario.codigo_verificacao
         }))
         return res;
     } catch (error) {
@@ -27,7 +28,7 @@ async function GetAllUsuario() {
 async function GetUsuarioByName(name) {
     const conexao = await pool.getConnection()
     try {
-        const query = `SELECT * FROM usuario WHERE nome LIKE = ?;`;
+        const query = `SELECT usuario.id, usuario.nome, usuario.email, usuario.facebook, usuario.instagram, usuario.youtube, login.senha, codigo_verificacao.codigo_verificacao FROM usuario INNER JOIN login ON usuario.id = login.id_usuario INNER JOIN codigo_verificacao ON login.codigo_verificacao_id = codigo_verificacao.id WHERE usuario.nome LIKE ?;`;
         const search = `%${name}%`
         const resposta = await executaQuery(conexao, query, [search])
         const res = resposta.map(usuario => ({
@@ -50,7 +51,7 @@ async function GetUsuarioByName(name) {
 async function GetUsuarioByEmail(email) {
     const conexao = await pool.getConnection()
     try {
-        const query = `SELECT * FROM usuario WHERE email LIKE = ?;`;
+        const query = `SELECT usuario.id, usuario.nome, usuario.email, usuario.facebook, usuario.instagram, usuario.youtube, login.senha, codigo_verificacao.codigo_verificacao FROM usuario INNER JOIN login ON usuario.id = login.id_usuario INNER JOIN codigo_verificacao ON login.codigo_verificacao_id = codigo_verificacao.id WHERE usuario.email LIKE ?;`;
         const search = `%${email}%`
         const resposta = await executaQuery(conexao, query, [search])
         const res = resposta.map(usuario => ({
@@ -73,7 +74,7 @@ async function GetUsuarioByEmail(email) {
 async function GetUsuarioById(id) {
     const conexao = await pool.getConnection()
     try {
-        const query = `SELECT * FROM usuario WHERE id = ?;`;
+        const query = `SELECT usuario.id, usuario.nome, usuario.email, usuario.facebook, usuario.instagram, usuario.youtube, login.senha, codigo_verificacao.codigo_verificacao FROM usuario INNER JOIN login ON usuario.id = login.id_usuario INNER JOIN codigo_verificacao ON login.codigo_verificacao_id = codigo_verificacao.id WHERE usuario.id = ?;`;
         const resposta = await executaQuery(conexao, query, [id])
         const res = resposta.map(usuario => ({
             id: usuario.id,
@@ -150,6 +151,8 @@ async function DeleteUsuario(id) {
         conexao.release();
     }
 }
+
+
 
 export {
     GetAllUsuario, GetUsuarioById, GetUsuarioByName, PatchUsuario, PostUsuario, PutUsuario, DeleteUsuario, GetUsuarioByEmail

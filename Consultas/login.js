@@ -1,5 +1,6 @@
 import { pool } from '../config/database.js';
 import { executaQuery } from '../config/dbInstance.js';
+import { DeleteCodigoVerificacao, GeraCodigoVerificacao, PostCodigoVerificacao, PutCodigoVerificacao } from './codigoVerificacao.js';
 
 async function GetAllLogins() {
     const conexao = await pool.getConnection();
@@ -24,7 +25,7 @@ async function GetAllLogins() {
 async function GetLoginById(id) {
     const conexao = await pool.getConnection();
     try {
-        const query = `SELECT * FROM login WHERE id = ?`;
+        const query = `SELECT * FROM login WHERE id_usuario = ?`;
         const resposta = await executaQuery(conexao, query, [id]);
         const res = resposta.map(login => ({
             id: login.id,
@@ -41,11 +42,12 @@ async function GetLoginById(id) {
     }
 }
 
-async function PostLogin(email, senha, codigo_verificacao_id) {
+async function PostLogin(email, senha, usuario) {
     const conexao = await pool.getConnection();
     try {
-        const query = `INSERT INTO login (email, senha, codigo_verificacao_id) VALUES (?, ?, ?)`;
-        const resposta = await executaQuery(conexao, query, [email, senha, codigo_verificacao_id]);
+        const query = `INSERT INTO login (email, senha, codigo_verificacao_id, id_usuario) VALUES (?, ?, ?, ?)`;
+        const codigo_verificacao = await PostCodigoVerificacao();
+        const resposta = await executaQuery(conexao, query, [email, senha, codigo_verificacao.id, usuario]);
         return resposta;
     } catch (error) {
         console.log(error);
@@ -55,11 +57,13 @@ async function PostLogin(email, senha, codigo_verificacao_id) {
     }
 }
 
-async function PutLogin(id, email, senha, codigo_verificacao_id) {
+async function PutLogin(id, email, senha) {
     const conexao = await pool.getConnection();
     try {
-        const query = `UPDATE login SET email = ?, senha = ?, codigo_verificacao_id = ?  WHERE id = ?`;
-        await executaQuery(conexao, query, [email, senha, codigo_verificacao_id, id]);
+        const query = `UPDATE login SET email = ?, senha = ? WHERE id_usuario = ?`;
+        await executaQuery(conexao, query, [email, senha, id]);
+        const resultado = await GetLoginById(id);
+        await PutCodigoVerificacao(resultado[0].codigo_verificacao_id);
     } catch (error) {
         console.log(error);
         throw error;
@@ -73,8 +77,10 @@ async function PatchLogin(id, dados) {
     try {
         const campos = Object.keys(dados).map(campo => `${campo} = ?`).join(', ');
         const valores = Object.values(dados);
-        const query = `UPDATE login SET ${campos} WHERE id = ?`;
+        const query = `UPDATE login SET ${campos} WHERE id_usuario = ?`;
         await executaQuery(conexao, query, [...valores, id]);
+        const resultado = await GetLoginById(id);
+        await PutCodigoVerificacao(resultado[0].codigo_verificacao_id);
     } catch (error) {
         console.log(error);
         throw error;
@@ -86,7 +92,9 @@ async function PatchLogin(id, dados) {
 async function DeleteLogin(id) {
     const conexao = await pool.getConnection();
     try {
-        const query = `DELETE FROM login WHERE id = ?`;
+        const resultado = GetLoginById(id);
+        await DeleteCodigoVerificacao(resultado.id)
+        const query = `DELETE FROM login WHERE id_usuario = ?`;
         await executaQuery(conexao, query, [id]);
     } catch (error) {
         console.log(error);
