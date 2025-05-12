@@ -9,8 +9,6 @@ import nivelRotas from '../Rotas/nivelRotas.js'
 const app = express();
 const PORT = 3000;
 
-const teste='teste'
-
 app.use(express.json());
 app.use('/api', receitasRotas); // prefixa as rotas das receitas com /api
 app.use('/api', categoriaRotas);
