@@ -1,7 +1,7 @@
 import pool from '../config/conexao.js'
 import { executaQuery } from '../config/dbInstance.js'
 
-// Lista todos os favoritos agrupados por usuário
+
 export async function GetTodosFavoritos() {
     const conexao = await pool.getConnection()
     try {
