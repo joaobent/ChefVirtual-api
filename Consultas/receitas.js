@@ -17,7 +17,7 @@ async function GetAllReceitas() {
                         
                     FROM receita AS r
                     INNER JOIN usuario AS u ON r.usuario_id = u.id
-                    INNER JOIN etapa AS e ON r.id = e.receita_id
+                    LEFT JOIN etapa AS e ON r.id = e.receita_id
                     ORDER BY r.id DESC
                     `
         const resQuery = await executaQuery(conexao, query)

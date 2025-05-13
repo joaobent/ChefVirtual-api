@@ -1,6 +1,16 @@
-import express from 'express';
-const router = express.Router();
+import express from 'express'
+import {
+    listarTodosFavoritos,
+    listarFavoritosUsuario,
+    adicionarFavorito,
+    atualizarFavorito
+} from '../controllers/favoritoController.js'
 
-// Definir as rotas aqui
+const router = express.Router()
 
-export default router;
+router.get('/favoritos', listarTodosFavoritos)
+router.get('/favoritos/:usuarioId', listarFavoritosUsuario)
+router.post('/favoritos', adicionarFavorito)
+router.patch('/favoritos/:usuarioId/:receitaId', atualizarFavorito)
+
+export default router
