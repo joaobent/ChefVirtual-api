@@ -1,7 +1,18 @@
-import { PostLogin } from "../Consultas/login.js";
+import { DeleteLogin, PostLogin, PutLogin, PatchLogin } from "../Consultas/login.js";
 import {
-  GetAllUsuario, GetUsuarioById, GetUsuarioByName, PatchUsuario, PostUsuario, PutUsuario, DeleteUsuario
-} from "../Consultas/usuario.js"
+  GetAllUsuario,
+  GetUsuarioById,
+  GetUsuarioByName,
+  GetUsuarioByEmail,
+  PatchUsuario,
+  PostUsuario,
+  PutUsuario,
+  DeleteUsuario
+} from "../Consultas/usuario.js";
+
+import multer from 'multer';
+const storage = multer.memoryStorage();
+export const upload = multer({ storage });
 
 export async function getUsuarios(req, res) {
   try {
@@ -17,21 +28,38 @@ export async function getUsuarios(req, res) {
 }
 
 export async function getUsuarioByTitle(req, res) {
-  const { tituloReceita } = req.query;
-
-  if (!tituloReceita) {
-    return res.status(400).json({ erro: 'Parâmetro "tituloReceita" é obrigatório' });
+  const { nome } = req.query;
+  if (!nome) {
+    return res.status(400).json({ erro: 'Parâmetro "nome" é obrigatório' });
   }
 
   try {
-    const receitas = await GetUsuarioByName(tituloReceita);
-    if (!receitas || receitas.length === 0) {
+    const usuario = await GetUsuarioByName(nome);
+    if (!usuario || usuario.length === 0) {
       return res.status(404).json({ erro: 'Nenhum usuário encontrado com esse título' });
     }
-    res.status(200).json(receitas);
+    res.status(200).json(usuario);
   } catch (error) {
     console.error('Erro ao buscar usuário por título:', error);
     res.status(500).json({ erro: 'Erro interno na busca por nome' });
+  }
+}
+
+export async function getUsuarioByEmail(req, res) {
+  const { email } = req.query;
+  if (!email) {
+    return res.status(400).json({ erro: 'Parâmetro "email" é obrigatório' });
+  }
+
+  try {
+    const usuario = await GetUsuarioByEmail(email);
+    if (!usuario || usuario.length === 0) {
+      return res.status(404).json({ erro: 'Nenhum usuário encontrado com esse email' });
+    }
+    res.status(200).json(usuario);
+  } catch (error) {
+    console.error('Erro ao buscar usuário por email:', error);
+    res.status(500).json({ erro: 'Erro interno na busca por email' });
   }
 }
 
@@ -54,12 +82,18 @@ export async function getUsuarioById(req, res) {
 }
 
 export async function postUsuario(req, res) {
-  const { nome, email, imagemUsuario, facebook, instagram, youtube, senha } = req.body;
+  const { nome, email, facebook, instagram, youtube, senha } = req.body;
+  const imagemUsuario = req.file ? req.file.buffer : null;
+
   try {
     const resultado = await PostUsuario(nome, email, imagemUsuario, facebook, instagram, youtube);
-    res.status(201).json({ mensagem: 'Usuário criado com sucesso', id: resultado.insertId });
-    const resultLogin = await PostLogin(email, senha, codigoVerificacao, resultado.insertId)
-    res.status(201).json({ mensagem: 'Usuário criado com sucesso', id: resultado.insertId });
+    const resultadoLogin = await PostLogin(email, senha, resultado.insertId);
+
+    res.status(201).json({
+      mensagem: 'Usuário e login criados com sucesso',
+      idUsuario: resultado.insertId,
+      idLogin: resultadoLogin.insertId
+    });
   } catch (error) {
     console.error('Erro ao criar usuário:', error);
     res.status(500).json({ erro: 'Erro ao criar usuário' });
@@ -68,9 +102,11 @@ export async function postUsuario(req, res) {
 
 export async function putUsuario(req, res) {
   const { id } = req.params;
-  const { nome, email, imagemUsuario, facebook, instagram, youtube } = req.body;
+  const { nome, email, facebook, instagram, youtube, senha } = req.body;
+  const imagemUsuario = req.file ? req.file.buffer : null;
   try {
     await PutUsuario(id, nome, email, imagemUsuario, facebook, instagram, youtube);
+    await PutLogin(id, email, senha)
     res.status(200).json({ mensagem: 'Usuário atualizado com sucesso' });
   } catch (error) {
     console.error('Erro ao atualizar usuário:', error);
@@ -80,17 +116,28 @@ export async function putUsuario(req, res) {
 
 export async function patchUsuario(req, res) {
   const { id } = req.params;
-  const { nome, email, imagemUsuario, facebook, instagram, youtube } = req.body;
+  const { nome, email, facebook, instagram, youtube, senha } = req.body;
+  const imagemUsuario = req.file ? req.file.buffer : null;
   const dados = {};
   if (nome) dados.nome = nome;
   if (email) dados.email = email;
   if (facebook) dados.facebook = facebook;
   if (instagram) dados.instagram = instagram;
   if (youtube) dados.youtube = youtube;
+  if (imagemUsuario) dados.imagem = imagemUsuario
+
+  const dadosLogin = {}
+  if (email) dadosLogin.email = email;
+  if (senha) dadosLogin.senha = senha;
 
   if (Object.keys(dados).length === 0) {
-    res.status(400).json({ mensagem: 'Ao menos um campo tem de estar preenchido' });
+    return res.status(400).json({ mensagem: 'Ao menos um campo deve ser preenchido' });
   }
+
+  if (Object.keys(dadosLogin).length !== 0) {
+    await PatchLogin(id, dadosLogin);
+  }
+
   try {
     await PatchUsuario(id, dados);
     res.status(200).json({ mensagem: 'Usuário atualizado parcialmente com sucesso' });
@@ -102,8 +149,11 @@ export async function patchUsuario(req, res) {
 
 export async function deleteUsuario(req, res) {
   const { id } = req.params;
+
   try {
+    await DeleteLogin(id);
     await DeleteUsuario(id);
+    
     res.status(200).json({ mensagem: 'Usuário deletado com sucesso' });
   } catch (error) {
     console.error('Erro ao deletar usuário:', error);
