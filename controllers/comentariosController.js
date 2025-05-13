@@ -1,5 +1,3 @@
-// controllers/comentariosController.js
-
 import { GetAllComentarios } from '../Consultas/comentarios.js'
 
 export const obterComentarios = async (req, res) => {
@@ -29,8 +27,6 @@ export const obterComentariosPorId = async (req, res) => {
 export const criarComentario = async (req, res) => {
   const { receitaId, usuarioId, comentario } = req.body
   try {
-    // Aqui você pode adicionar a lógica para criar um novo comentário no banco de dados
-    // Exemplo: await criarComentarioNoBanco(receitaId, usuarioId, comentario)
     res.status(201).json({ mensagem: 'Comentário criado com sucesso' })
   } catch (error) {
     console.error('Erro ao criar comentário:', error)
@@ -42,8 +38,6 @@ export const criarComentario = async (req, res) => {
 export const deletarComentario = async (req, res) => {
   const { id } = req.params
   try {
-    // Aqui você pode adicionar a lógica para deletar um comentário no banco de dados
-    // Exemplo: await deletarComentarioNoBanco(id)
     res.status(200).json({ mensagem: 'Comentário deletado com sucesso' })
   } catch (error) {
     console.error('Erro ao deletar comentário:', error)
