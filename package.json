@@ -10,6 +10,7 @@
     "nodemailer": "^7.0.3",
     "notenv": "^2.0.3",
     "process": "^0.11.10",
+    "swagger": "^0.7.5",
     "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.1"
   },
