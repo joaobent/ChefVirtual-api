@@ -9,7 +9,7 @@ import usuarioRouter from '../Rotas/usuarioRotas.js'
 
 
 const app = express();
-const PORT = 8000;
+const PORT = 3000;
 
 app.use(express.json());
 app.use('/api', receitasRotas); // prefixa as rotas das receitas com /api
