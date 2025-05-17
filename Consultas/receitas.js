@@ -8,38 +8,24 @@ async function GetAllReceitas() {
             `
                     SELECT 
                         r.*, 
-                        u.id, u.nome, u.email, u.facebook, u.instagram, u.youtube, u.imagem AS imagemUsuario,
-
-                        e.id AS etapaId,
-                        e.numeroEtapa,
-                        e.descricao AS etapaDescricao
-                        
-                        
+                        u.id AS usuarioId, u.nome, u.email, u.facebook, u.instagram, u.youtube, u.imagem AS imagemUsuario
                     FROM receita AS r
                     INNER JOIN usuario AS u ON r.usuario_id = u.id
-                    LEFT JOIN etapa AS e ON r.id = e.receita_id
                     ORDER BY r.id DESC
                     `
         const resQuery = await executaQuery(conexao, query)
-        const res = resQuery.map(r => ({
-            tituloReceita: r.titulo,
-            imagemReceita: r.imagem,
-            descricao: r.descricao,
-            //TODO: Fazer depos favoritos: r.favoritos,
-            usuario: {
-                id: r.id,
-                nome: r.nome,
-            },
-            etapas: {
-                id: r.etapaId,
-                numeroEtapa: r.numeroEtapa,
-                descricao: r.etapaDescricao
-            }
-
-        }))
-        console.log(res)
-
-        return res;
+        const receitas = resQuery.map(row => ({
+        tituloReceita: row.titulo,
+        descricao: row.descricao,
+        tempoPreparo: row.tempo_preparo,
+        usuario: {
+            id: row.usuarioId,
+            nome: row.nome,
+            imagemUser: row.imagemUsuario ? row.imagemUsuario.toString('base64') : null,
+        },
+        imagemReceita: row.imagem ? row.imagem.toString('base64') : null,
+    }));
+        return receitas;
     }
     catch (ex) {
         console.log(ex)
@@ -48,6 +34,93 @@ async function GetAllReceitas() {
         conexao.release()
     }
 }
+
+async function GetReceita(receitaid) {
+    const conexao = await pool.getConnection();
+    try {
+const query = `
+            SELECT 
+                r.titulo, r.descricao, r.imagem, r.tempo_preparo,
+                u.id AS userId, u.nome AS usuarioNome,
+                i.nome AS ingredienteNome,
+                ir.quantidade, ir.medida,
+                e.numeroEtapa, e.descricao AS etapaDescricao,
+                ROUND(AVG(f.avaliacao), 1) AS mediaAvaliacao,
+                COUNT(f.usuario_id) AS totalFavoritos
+            FROM receita AS r
+            INNER JOIN ingrediente_receita AS ir ON r.id = ir.receita_id
+            INNER JOIN ingrediente AS i ON ir.ingrediente_id = i.id
+            INNER JOIN usuario AS u ON r.usuario_id = u.id
+            INNER JOIN etapa AS e ON r.id = e.receita_id
+            LEFT JOIN favoritos AS f ON r.id = f.receita_id
+            WHERE r.id = ?
+            GROUP BY 
+            r.id, r.titulo, r.descricao, r.imagem, r.tempo_preparo,
+            u.id, u.nome,
+            i.nome,
+            ir.quantidade, ir.medida,
+            e.numeroEtapa, e.descricao;
+        `;
+
+        const resQuery = await executaQuery(conexao, query, [receitaid]);
+
+        if (!resQuery || resQuery.length === 0) {
+            return resQuery;
+        }
+
+        const row = resQuery[0];
+
+        const etapasMap = new Map();
+        const ingredientesMap = new Map();
+
+        for (const linha of resQuery) {
+            const chaveIngrediente = `${linha.ingredienteNome}-${linha.quantidade}-${linha.medida}`;
+
+            if (!ingredientesMap.has(chaveIngrediente)) {
+                ingredientesMap.set(chaveIngrediente, {
+                    nomeIngrediente: linha.ingredienteNome,
+                    quantidade: linha.quantidade,
+                    medida: linha.medida
+                });
+            }
+
+            const chaveEtapa = `${linha.numeroEtapa}`;
+
+            if (!etapasMap.has(chaveEtapa)) {
+                etapasMap.set(chaveEtapa, {
+                    numeroEtapa: linha.numeroEtapa,
+                    descricao: linha.etapaDescricao
+                });
+            }
+        }
+
+        const resultado = {
+            tituloReceita: row.titulo,
+            descricao: row.descricao,
+            tempoPreparo: row.tempo_preparo,
+            favoritos: {
+                totalFavoritos: row.totalFavoritos || 0,
+                mediaFavoritos: parseFloat(row.mediaAvaliacao) || 0
+            },
+            usuario: {
+                id: row.userId,
+                nome: row.usuarioNome
+            },
+            ingredientes: Array.from(ingredientesMap.values()),
+            etapas: Array.from(etapasMap.values()),
+            imagemReceita: (row.imagem && row.imagem.length > 0) ? row.imagem.toString('base64') : null
+
+        };
+
+        return resultado;
+    } catch (ex) {
+        console.error('Erro ao buscar receita:', ex);
+        throw ex;
+    } finally {
+        conexao.release();
+    }
+}
+
 
 async function GetReceitasByTitle(name) {
     if (typeof name !== 'string')
@@ -123,6 +196,6 @@ async function UpdateReceitasPartial(userId, dados) {
 }
 
 export {
-    GetAllReceitas, GetReceitasByTitle, GetReceitasByUser,
+    GetAllReceitas, GetReceitasByTitle, GetReceitasByUser, GetReceita,
     UpdateReceitasPartial
 }

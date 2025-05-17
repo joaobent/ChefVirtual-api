@@ -1,10 +1,15 @@
 import mysql from 'mysql2/promise'
+import dotenv from 'dotenv'
+
+dotenv.config()
+
+console.log(process.env.PORT);
 
 const pool = mysql.createPool(
     {
-        host: '200.129.130.149', 
+        host: '200.129.130.149',
+        port: '20002',
         user: 'chefvirtual',
-        port: 20002,
         password: '12345678',
         database: 'chefvirtual_db',
         waitForConnections: true,

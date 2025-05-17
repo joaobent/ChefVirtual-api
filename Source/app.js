@@ -1,11 +1,17 @@
 import express from 'express';
+import swaggerUi from 'swagger-ui-express'
+import swaggerDocument from './swaggerOpt.json' with { type: 'json' };
+
 import receitasRotas from '../Rotas/receitasRotas.js'
 import categoriaRotas from '../Rotas/categoriaRotas.js'
 import comentariosRotas from '../Rotas/comentariosRotas.js'
 import favoritoRotas from '../Rotas/favoritoRotas.js'
-import loginRotas from '../Rotas/loginRotas,.js'
-import nivelRotas from '../Rotas/nivelRotas.js'
+import loginRouter from '../Rotas/loginRotas.js'
+
+import codigoVerificacao  from '../Rotas/codigoVerificacao.js';
 import usuarioRouter from '../Rotas/usuarioRotas.js'
+
+import criarReceita from '../Rotas/pubReceita.js'
 
 import pool from '../config/conexao.js'
 import http from 'http'
@@ -13,6 +19,8 @@ import http from 'http'
 
 const app = express();
 const PORT = 3000;
+
+
 
 app.use(express.json());
 app.use('/', receitasRotas); // prefixa as rotas das receitas com /api
@@ -22,6 +30,7 @@ app.use('/', favoritoRotas);
 app.use('/', codigoVerificacao);
 app.use('/', usuarioRouter)
 app.use('/', loginRouter)
+app.use('/', criarReceita); 
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 
