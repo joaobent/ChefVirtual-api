@@ -44,13 +44,22 @@ const query = `
                 u.id AS userId, u.nome AS usuarioNome,
                 i.nome AS ingredienteNome,
                 ir.quantidade, ir.medida,
-                e.numeroEtapa, e.descricao AS etapaDescricao
+                e.numeroEtapa, e.descricao AS etapaDescricao,
+                ROUND(AVG(f.avaliacao), 1) AS mediaAvaliacao,
+                COUNT(f.usuario_id) AS totalFavoritos
             FROM receita AS r
             INNER JOIN ingrediente_receita AS ir ON r.id = ir.receita_id
             INNER JOIN ingrediente AS i ON ir.ingrediente_id = i.id
             INNER JOIN usuario AS u ON r.usuario_id = u.id
             INNER JOIN etapa AS e ON r.id = e.receita_id
-            WHERE r.id = ?;
+            LEFT JOIN favoritos AS f ON r.id = f.receita_id
+            WHERE r.id = ?
+            GROUP BY 
+            r.id, r.titulo, r.descricao, r.imagem, r.tempo_preparo,
+            u.id, u.nome,
+            i.nome,
+            ir.quantidade, ir.medida,
+            e.numeroEtapa, e.descricao;
         `;
 
         const resQuery = await executaQuery(conexao, query, [receitaid]);
@@ -90,8 +99,8 @@ const query = `
             descricao: row.descricao,
             tempoPreparo: row.tempo_preparo,
             favoritos: {
-                totalAvaliacoes: row.totalAvaliacoes || 0,
-                mediaAvaliacoes: row.mediaAvaliacoes || 0
+                totalFavoritos: row.totalFavoritos || 0,
+                mediaFavoritos: parseFloat(row.mediaAvaliacao) || 0
             },
             usuario: {
                 id: row.userId,

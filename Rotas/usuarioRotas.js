@@ -1,7 +1,8 @@
 import express from 'express';
-const usuarioRouter = express.Router();
 import { getUsuarios, getUsuarioByTitle, getUsuarioById, patchUsuario, postUsuario, putUsuario, deleteUsuario, upload, getUsuarioByEmail } from '../controllers/usuarioController.js';
 // Definir as rotas aqui
+
+const usuarioRouter = express.Router();
 
 usuarioRouter.get('/usuarios', getUsuarios);
 usuarioRouter.get('/usuarios/pesquisa/nome', getUsuarioByTitle);
