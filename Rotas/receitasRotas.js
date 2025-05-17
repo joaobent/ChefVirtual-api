@@ -1,9 +1,48 @@
 import express from 'express';
-import { getReceitas, getReceitasByTitle, getReceitasByUser, patchReceitas } from '../controllers/receitasController.js';
+import {
+  getReceitas,
+  getReceita,
+  getReceitasByTitle,
+  getReceitasByUser,
+  patchReceitas
+} from '../controllers/receitasController.js';
 
 const router = express.Router();
-router.get('/Receitas', getReceitas); // GET - Retorna todas as receitas
-router.get('/Receitas/Busca', getReceitasByTitle); // GET - Retorna as receitas referente ao campo de busca
-router.get('/Receitas/BuscaUsuario', getReceitasByUser) // GET - Retorna as receitas referente a um usuario especifico
-router.patch('/Receitas/AtualizarParcial', patchReceitas) // PATCH - Atualiza os dados informados no JSON
+
+// GET - Retorna todas as receitas
+// GET - Retorna todas as receitas
+router.get('/Receitas', (req, res) => {
+  // #swagger.tags = ['Receitas']
+  // #swagger.description = 'Lista todas as receitas'
+  getReceitas(req, res);
+});
+
+// GET - Retorna a receita a partir do id informado
+router.get('/Receita/GetReceita', (req, res) => {
+  // #swagger.tags = ['Receitas']
+  // #swagger.description = 'Retorna a receita a partir do ID informado'
+  getReceita(req, res);
+});
+
+// GET - Retorna as receitas referente ao campo de busca
+router.get('/Receitas/Busca', (req, res) => {
+  // #swagger.tags = ['Receitas']
+  // #swagger.description = 'Busca receitas pelo título'
+  getReceitasByTitle(req, res);
+});
+
+// GET - Retorna as receitas referente a um usuário específico
+router.get('/Receitas/BuscaPorUsuario', (req, res) => {
+  // #swagger.tags = ['Receitas']
+  // #swagger.description = 'Retorna receitas de um usuário específico'
+  getReceitasByUser(req, res);
+});
+
+// PATCH - Atualiza os dados informados no JSON
+router.patch('/Receitas/AtualizarParcial', (req, res) => {
+  // #swagger.tags = ['Receitas']
+  // #swagger.description = 'Atualiza parcialmente uma receita'
+  patchReceitas(req, res);
+});
+
 export default router;
