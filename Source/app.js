@@ -7,6 +7,10 @@ import loginRouter from '../Rotas/loginRotas.js'
 // import nivelRotas from '../Rotas/nivelRotas.js'
 import usuarioRouter from '../Rotas/usuarioRotas.js'
 
+import pool from '../config/conexao.js'
+import http from 'http'
+
+
 
 const app = express();
 const PORT = 3000;
@@ -20,6 +24,27 @@ app.use('/api', favoritoRotas);
 app.use('/api', usuarioRouter)
 app.use('/api', loginRouter)
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:3000`);
+
+
+const server = http.createServer(app);
+server.listen(PORT, async () => {
+  console.log("🟡 Inicializando servidor...");
+  try {
+    const connection = await pool.getConnection();
+    connection.ping();
+    connection.release();
+    console.log("🟢 Conexão ao banco de dados realizada com sucesso!");
+  }
+  catch {
+    console.error("🔴 Tentativa de conxão ao banco de dados falha!");
+    server.close();
+    return;
+  }
+  console.log("🟢 Servidor iniciado!");
 });
+
+
+// app.listen(PORT, () => {
+//   console.log(`Servidor rodando em http://localhost:3000`);
+
+// });
