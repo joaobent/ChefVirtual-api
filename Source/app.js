@@ -7,12 +7,12 @@ import categoriaRotas from '../Rotas/categoriaRotas.js'
 import comentariosRotas from '../Rotas/comentariosRotas.js'
 import favoritoRotas from '../Rotas/favoritoRotas.js'
 import loginRouter from '../Rotas/loginRotas.js'
-<<<<<<< HEAD
+
 import codigoVerificacao  from '../Rotas/codigoVerificacao.js';
 import usuarioRouter from '../Rotas/usuarioRotas.js'
 
-=======
->>>>>>> 923c6d138c9a667e1cf9a91916fa4cc99a2d3173
+
+
 import pool from '../config/conexao.js'
 import http from 'http'
 //import nivelRotas from '../Rotas/nivelRotas.js'
