@@ -4,7 +4,8 @@ import {
   getReceita,
   getReceitasByTitle,
   getReceitasByUser,
-  patchReceitas
+  patchReceitas,
+  getReceitasByCategoria
 } from '../controllers/receitasController.js';
 
 const router = express.Router();
@@ -20,15 +21,21 @@ router.get('/Receitas', (req, res) => {
 // GET - Retorna a receita a partir do id informado
 router.get('/Receita/GetReceita', (req, res) => {
   // #swagger.tags = ['Receitas']
-  // #swagger.description = 'Retorna a receita a partir do ID informado'
+  // #swagger.description = 'Retorna a receita a partir do ID da receita informado'
   getReceita(req, res);
 });
 
 // GET - Retorna as receitas referente ao campo de busca
-router.get('/Receitas/Busca', (req, res) => {
+router.get('/Receitas/BuscaPorTitulo', (req, res) => {
   // #swagger.tags = ['Receitas']
-  // #swagger.description = 'Busca receitas pelo título'
+  // #swagger.description = 'Busca receitas por seu título'
   getReceitasByTitle(req, res);
+});
+
+router.get('/Receitas/BuscaPorCategoria', (req, res) => {
+  // #swagger.tags = ['Receitas']
+  // #swagger.description = 'Busca receitas por sua categoria'
+  getReceitasByCategoria(req, res);
 });
 
 // GET - Retorna as receitas referente a um usuário específico

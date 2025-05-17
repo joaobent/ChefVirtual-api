@@ -5,25 +5,25 @@ async function GetAllReceitas() {
     const conexao = await pool.getConnection()
     try {
         const query =
-            `
+                `
                     SELECT 
-                        r.*, 
-                        u.id AS usuarioId, u.nome, u.email, u.facebook, u.instagram, u.youtube, u.imagem AS imagemUsuario
+                        r.id, r.titulo, r.imagem, 
+                        u.id AS usuarioId, u.nome
                     FROM receita AS r
                     INNER JOIN usuario AS u ON r.usuario_id = u.id
                     ORDER BY r.id DESC
-                    `
+                `
         const resQuery = await executaQuery(conexao, query)
         const receitas = resQuery.map(row => ({
-        tituloReceita: row.titulo,
-        descricao: row.descricao,
-        tempoPreparo: row.tempo_preparo,
-        usuario: {
-            id: row.usuarioId,
-            nome: row.nome,
-            imagemUser: row.imagemUsuario ? row.imagemUsuario.toString('base64') : null,
-        },
-        imagemReceita: row.imagem ? row.imagem.toString('base64') : null,
+            id: row.id,
+            tituloReceita: row.titulo,
+            descricao: row.descricao,
+            tempoPreparo: row.tempo_preparo,
+            usuario: {
+                id: row.usuarioId,
+                nome: row.nome,
+            },
+            imagemReceita: row.imagem ? row.imagem.toString('base64') : null,
     }));
         return receitas;
     }
@@ -123,20 +123,73 @@ const query = `
 
 
 async function GetReceitasByTitle(name) {
-    if (typeof name !== 'string')
-        return
 
     const conexao = await pool.getConnection()
     try {
         const query =
-            `SELECT r.nome
-                    FROM receita AS r
-                    WHERE r.nome LIKE ?
-                    `;
+            `   SELECT 
+                    r.titulo, r.imagem, 
+                    u.id AS usuarioId, u.nome
+                FROM receita AS r
+                INNER JOIN usuario AS u ON r.usuario_id = u.id
+                WHERE r.titulo LIKE ?
+                ORDER BY r.id DESC
+            `;
 
         const search = `%${name}%`
-        const res = await executaQuery(conexao, query, [search])
-        return res;
+        const resQuery = await executaQuery(conexao, query, [search])
+        
+        const receitas = resQuery.map(row => ({
+            id: row.id,
+            tituloReceita: row.titulo,
+            tempoPreparo: row.tempo_preparo,
+            usuario: {
+                id: row.usuarioId,
+                nome: row.nome,
+            },
+            imagemReceita: row.imagem ? row.imagem.toString('base64') : null,
+        }));
+
+        return receitas;
+    }
+    catch (ex) {
+        console.log(ex)
+    }
+    finally {
+        conexao.release()
+    }
+}
+
+async function GetReceitasByCategoria(idCategoria) {
+    const conexao = await pool.getConnection()
+    try {
+        const query =
+            `
+                SELECT 
+                    r.id, r.titulo, r.imagem, 
+                    u.id AS usuarioId, u.nome
+                FROM receita AS r
+                INNER JOIN usuario AS u ON r.usuario_id = u.id
+                INNER JOIN categoria_receita as cr
+                WHERE r.id = cr.receita_id AND cr.categoria_id = ?
+                ORDER BY r.id DESC
+            `
+
+        const resQuery = await executaQuery(conexao, query, [idCategoria])
+        
+        const receitas = resQuery.map(row => ({
+            id: row.id,
+            tituloReceita: row.titulo,
+            descricao: row.descricao,
+            tempoPreparo: row.tempo_preparo,
+            usuario: {
+                id: row.usuarioId,
+                nome: row.nome,
+            },
+            imagemReceita: row.imagem ? row.imagem.toString('base64') : null,
+            }));
+
+        return receitas;
     }
     catch (ex) {
         console.log(ex)
@@ -147,19 +200,33 @@ async function GetReceitasByTitle(name) {
 }
 
 async function GetReceitasByUser(userId) {
-    if (typeof userId !== 'number')
-        return
-
     const conexao = await pool.getConnection()
     try {
         const query =
-            `SELECT r.nome, u.nome
-                    FROM receita AS r
-                    INNER JOIN usuario as u ON r.usuario_id = u.id
-                    `;
+            `
+            SELECT 
+                r.id, r.titulo, r.descricao, r.tempo_preparo, r.imagem,
+                u.nome, u.id AS usuarioId
+            FROM receita AS r
+            INNER JOIN usuario as u ON r.usuario_id = u.id
+            WHERE r.usuario_id = ?
+            `;
 
-        const res = executaQuery(conexao, query)
-        return res;
+        const resQuery = await executaQuery(conexao, query, [userId])
+
+        const receitas = resQuery.map(row => ({
+            id: row.id,
+            tituloReceita: row.titulo,
+            descricao: row.descricao,
+            tempoPreparo: row.tempo_preparo,
+            usuario: {
+                id: row.usuarioId,
+                nome: row.nome,
+            },
+            imagemReceita: row.imagem ? row.imagem.toString('base64') : null,
+        }));
+
+        return receitas;
     }
     catch (ex) {
         console.log(ex)
@@ -196,6 +263,6 @@ async function UpdateReceitasPartial(userId, dados) {
 }
 
 export {
-    GetAllReceitas, GetReceitasByTitle, GetReceitasByUser, GetReceita,
+    GetAllReceitas, GetReceitasByTitle, GetReceitasByUser, GetReceita, GetReceitasByCategoria,
     UpdateReceitasPartial
 }

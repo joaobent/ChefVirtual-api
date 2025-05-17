@@ -1,9 +1,9 @@
-import {GetAllReceitas, GetReceita, GetReceitasByTitle, GetReceitasByUser, UpdateReceitasPartial} from '../Consultas/receitas.js'
+import {GetAllReceitas, GetReceita, GetReceitasByCategoria, GetReceitasByTitle, GetReceitasByUser, UpdateReceitasPartial} from '../Consultas/receitas.js'
 
 export async function getReceitas(req, res) {
   try {
     const receitas = await GetAllReceitas();
-    if(receitas && receitas.length > 0) {
+    if(receitas.length !== 0) {
       res.json(receitas);
     }
     else{
@@ -25,9 +25,8 @@ export async function getReceita(req, res) {
 
   try
   {
-    console.log(parseInt(idReceita))
     const result = await GetReceita(idReceita)
-    if (result) {
+    if (result.length !==0) {
       res.status(200).json(result)
     }
     else{
@@ -50,7 +49,7 @@ export async function getReceitasByTitle(req, res) {
 
   try {
     const receitas = await GetReceitasByTitle(tituloReceita);
-    if(receitas.lenght > 0){
+    if(receitas.length !== 0){
       res.json(receitas);
     }
     else{
@@ -61,11 +60,38 @@ export async function getReceitasByTitle(req, res) {
   }
 }
 
+export async function getReceitasByCategoria(req, res) {
+  const {idCategoria} = req.query;
+
+  if (!idCategoria || isNaN(Number(idCategoria))){
+    return res.status(400).json({ erro: 'O parâmetro idUsuario é inválido.' });
+  }
+
+  try
+  {
+    const receitas = await GetReceitasByCategoria(idCategoria)
+    if (receitas.length !== 0){
+      res.json(receitas)
+    }
+    else{
+      return res.status(404).json({ erro: 'Nenhuma receita encontrada para a categoria' });
+    }
+  }
+  catch (error){
+    res.status(500).json({erro: 'Erro na busca', error})
+  }
+}
+
 
 export async function getReceitasByUser(req, res) {
   const {idUsuario} = req.query;
 
-  try{
+  if (!idUsuario || isNaN(Number(idUsuario))){
+    return res.status(400).json({ erro: 'O parâmetro idUsuario é obrigatório.' });
+  }
+
+  try
+  {
     const receitas = await GetReceitasByUser(idUsuario)
     res.json(receitas)
   }
@@ -77,6 +103,10 @@ export async function getReceitasByUser(req, res) {
 export async function patchReceitas(req, res) {
   const {idUsuario} = req.params;
   const dados = req.body;
+
+  if (!idUsuario || isNaN(Number(idUsuario))){
+    return res.status(400).json({ erro: 'O parâmetro idUsuario é obrigatório.' });
+  }
 
   if (!dados || (Array.isArray(dados) && dados.length === 0) || (typeof dados === 'object' && Object.keys(dados).length === 0)) {
     return res.status(400).json({ erro: 'Dados para atualização de receita não podem estar vazios.' });
