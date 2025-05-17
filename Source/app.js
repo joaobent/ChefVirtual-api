@@ -11,6 +11,8 @@ import loginRouter from '../Rotas/loginRotas.js'
 import codigoVerificacao  from '../Rotas/codigoVerificacao.js';
 import usuarioRouter from '../Rotas/usuarioRotas.js'
 
+import criarReceita from '../Rotas/pubReceita.js'
+
 import pool from '../config/conexao.js'
 import http from 'http'
 
@@ -28,6 +30,7 @@ app.use('/', favoritoRotas);
 app.use('/', codigoVerificacao);
 app.use('/', usuarioRouter)
 app.use('/', loginRouter)
+app.use('/', criarReceita); 
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 
