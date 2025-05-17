@@ -16,13 +16,13 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json());
-app.use('/api', receitasRotas); // prefixa as rotas das receitas com /api
-app.use('/api', categoriaRotas);
-app.use('/api', comentariosRotas);
-app.use('/api', favoritoRotas);
+app.use('/', receitasRotas); // prefixa as rotas das receitas com /api
+app.use('/', categoriaRotas);
+app.use('/', comentariosRotas);
+app.use('/', favoritoRotas);
 // app.use('/api', nivelRotas);
-app.use('/api', usuarioRouter)
-app.use('/api', loginRouter)
+app.use('/', usuarioRouter)
+app.use('/', loginRouter)
 
 
 
