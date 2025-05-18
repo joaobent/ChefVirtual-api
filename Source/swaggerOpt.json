@@ -41,7 +41,7 @@
     }
   ],
   "paths": {
-    "/Receitas/": {
+    "/api/Receitas/": {
       "get": {
         "tags": [
           "Receitas"
@@ -60,7 +60,7 @@
         }
       }
     },
-    "/Receitas/GetReceita": {
+    "/api/Receitas/GetReceita": {
       "get": {
         "tags": [
           "Receitas"
@@ -91,7 +91,7 @@
         }
       }
     },
-    "/Receitas/BuscaPorTitulo": {
+    "/api/Receitas/BuscaPorTitulo": {
       "get": {
         "tags": [
           "Receitas"
@@ -122,7 +122,7 @@
         }
       }
     },
-    "/Receitas/BuscaPorCategoria": {
+    "/api/Receitas/BuscaPorCategoria": {
       "get": {
         "tags": [
           "Receitas"
@@ -153,7 +153,7 @@
         }
       }
     },
-    "/Receitas/BuscaPorUsuario": {
+    "/api/Receitas/BuscaPorUsuario": {
       "get": {
         "tags": [
           "Receitas"
@@ -181,7 +181,7 @@
         }
       }
     },
-    "/Receitas/AtualizarParcial": {
+    "/api/Receitas/AtualizarParcial": {
       "patch": {
         "tags": [
           "Receitas"
@@ -297,7 +297,7 @@
         }
       }
     },
-    "/Comentarios/GetComentarios": {
+    "/api/Comentarios/GetComentarios": {
       "get": {
         "tags": [
           "Comentários"
@@ -328,7 +328,7 @@
         }
       }
     },
-    "/Comentarios/PostComentarios": {
+    "/api/Comentarios/PostComentarios": {
       "post": {
         "tags": [
           "Comentários"
@@ -367,7 +367,7 @@
         }
       }
     },
-    "/Comentarios/DeleteComentarios": {
+    "/api/Comentarios/DeleteComentarios": {
       "delete": {
         "tags": [
           "Comentários"
@@ -398,7 +398,7 @@
         }
       }
     },
-    "/Favoritos/GetFavoritos": {
+    "/api/Favoritos/GetFavoritos": {
       "get": {
         "tags": [
           "Favoritos"
@@ -423,7 +423,7 @@
         }
       }
     },
-    "/Favoritos/PostFavoritos": {
+    "/api/Favoritos/PostFavoritos": {
       "post": {
         "tags": [
           "Favoritos"
@@ -456,7 +456,7 @@
         }
       }
     },
-    "/Favoritos/PatchFavoritos": {
+    "/api/Favoritos/PatchFavoritos": {
       "patch": {
         "tags": [
           "Favoritos"
@@ -485,7 +485,7 @@
         }
       }
     },
-    "/Verificacao/codigo": {
+    "/api/Verificacao/codigo": {
       "get": {
         "tags": [
           "Verificação"
@@ -515,7 +515,7 @@
         }
       }
     },
-    "/Verificacao/GetCodigoPorEmail/": {
+    "/api/Verificacao/GetCodigoPorEmail/": {
       "get": {
         "tags": [
           "Verificação"
@@ -547,7 +547,7 @@
         }
       }
     },
-    "/Verificacao/codigo/{id}": {
+    "/api/Verificacao/codigo/{id}": {
       "get": {
         "tags": [
           "Verificação"
@@ -639,7 +639,7 @@
         }
       }
     },
-    "/Usuarios/": {
+    "/api/Usuarios/": {
       "get": {
         "tags": [
           "Usuários"
@@ -807,7 +807,7 @@
         }
       }
     },
-    "/Login/GetLogins": {
+    "/api/Login/GetLogins": {
       "get": {
         "tags": [
           "Login"
@@ -826,7 +826,7 @@
         }
       }
     },
-    "/Login/logins/{idLogin}": {
+    "/api/Login/logins/{idLogin}": {
       "get": {
         "tags": [
           "Login"
@@ -858,7 +858,7 @@
         }
       }
     },
-    "/Login/ConfirmarLogin": {
+    "/api/Login/ConfirmarLogin": {
       "get": {
         "tags": [
           "Login"
@@ -890,7 +890,7 @@
         }
       }
     },
-    "/Publicacao/PublicarReceita": {
+    "/api/Publicacao/PublicarReceita": {
       "post": {
         "tags": [
           "Publicação"
@@ -935,7 +935,7 @@
         }
       }
     },
-    "/Publicacao/PublicarEtapa": {
+    "/api/Publicacao/PublicarEtapa": {
       "post": {
         "tags": [
           "Publicação"
@@ -990,7 +990,7 @@
       }
       }
     },
-    "/Publicacao/PublicarIngrediente": {
+    "/api/Publicacao/PublicarIngrediente": {
       "post": {
         "tags": [
           "Publicação"
