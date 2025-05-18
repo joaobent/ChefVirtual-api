@@ -17,7 +17,7 @@ import http from 'http'
 const app = express();
 const PORT = 3000;
 
-app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument, {
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
     explorer: true,
     swaggerOptions: {
         docExpansion: 'none',

@@ -11,7 +11,7 @@ const doc = {
     title: 'API Chef Virtual',
     description: 'Documentação da API Chef Virtual',
   },
-  host: 'localhost:3000',
+  host: 'https://chefvirtual.dev.vilhena.ifro.edu.br/api/',
   schemes: ['http'],
   tags: [
     { name: 'Receitas', description: 'Operações relacionadas às receitas' },
