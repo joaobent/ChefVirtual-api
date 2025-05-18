@@ -17,7 +17,13 @@ import http from 'http'
 const app = express();
 const PORT = 3000;
 
-
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument, {
+    explorer: true,
+    swaggerOptions: {
+        docExpansion: 'none',
+        defaultModelsExpandDepth: -1,
+    }
+}));
 
 app.use(express.json());
 app.use('/api', receitasRotas); // prefixa as rotas das receitas com /api
@@ -28,7 +34,6 @@ app.use('/api', codigoVerificacao);
 app.use('/api', usuarioRouter)
 app.use('/api', loginRouter)
 app.use('/api', pubReceita); 
-app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 
 const server = http.createServer(app);
