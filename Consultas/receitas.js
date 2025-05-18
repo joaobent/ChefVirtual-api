@@ -237,29 +237,70 @@ async function GetReceitasByUser(userId) {
 }
 
 async function UpdateReceitasPartial(userId, dados) {
-    if (typeof userId !== 'number')
-        return
+  const conexao = await pool.getConnection();
 
-    const conexao = await pool.getConnection()
-    try {
-        const campos = Object.keys(dados).map(campo => `${campo} = ?`).join(', ');
-        const valores = Object.values(dados);
+  try {
+    const receitaId = Number(dados.idReceita);
 
-        console.log(`Campos: ${campos}`)
-        console.log(`Valores: ${valores}`)
+    const [receita] = await executaQuery(conexao, `
+      SELECT * FROM receita WHERE id = ? AND usuario_id = ?
+    `, [receitaId, userId]);
 
-        const query = `UPDATE Receita SET ${campos} WHERE id = ?`;
-        await executaQuery(conexao, query, [...valores, userId]);
-
-        const res = executaQuery(conexao, query)
-        return res;
+    if (!receita) {
+      return { sucesso: false };
     }
-    catch (ex) {
-        console.log(ex)
+
+    const camposPermitidos = ['titulo', 'descricao', 'imagem', 'tempo_preparo'];
+    const camposAtualizar = {};
+
+    for (const campo of camposPermitidos) {
+      if (dados[campo]) {
+        camposAtualizar[campo] = dados[campo];
+      }
     }
-    finally {
-        conexao.release()
+
+    if (Object.keys(camposAtualizar).length > 0) {
+      const campos = Object.keys(camposAtualizar).map(campo => `${campo} = ?`).join(', ');
+      const valores = Object.values(camposAtualizar);
+
+      await executaQuery(conexao, `
+        UPDATE receita SET ${campos} WHERE id = ?
+      `, [...valores, receitaId]);
     }
+
+    if (Array.isArray(dados.ingredientes)) {
+      await executaQuery(conexao, `DELETE FROM ingrediente_receita WHERE receita_id = ?`, [receitaId]);
+
+      for (const ingrediente of dados.ingredientes) {
+        const { idIngredienteDb, quantidade, medida, unidade } = ingrediente;
+
+        await executaQuery(conexao, `
+          INSERT INTO ingrediente_receita (receita_id, ingrediente_id, quantidade, medida, unidade)
+          VALUES (?, ?, ?, ?, ?)
+        `, [receitaId, idIngredienteDb, quantidade, medida, unidade]);
+      }
+    }
+
+    if (Array.isArray(dados.etapas)) {
+      await executaQuery(conexao, `DELETE FROM etapa WHERE receita_id = ?`, [receitaId]);
+
+      for (const etapa of dados.etapas) {
+        const { numeroEtapa, descricao } = etapa;
+
+        await executaQuery(conexao, `
+          INSERT INTO etapa (receita_id, numeroEtapa, descricao)
+          VALUES (?, ?, ?)
+        `, [receitaId, numeroEtapa, descricao]);
+      }
+    }
+
+    return { sucesso: true };
+  } catch (error) {
+    console.error('Erro em UpdateReceitasPartial:', error);
+    throw error;
+  } finally {
+    conexao.release();
+  }
 }
 
 export {

@@ -101,30 +101,30 @@ export async function getReceitasByUser(req, res) {
 }
 
 export async function patchReceitas(req, res) {
-  const {idUsuario} = req.params;
+  const { idUsuario } = req.query;
   const dados = req.body;
 
-  if (!idUsuario || isNaN(Number(idUsuario))){
-    return res.status(400).json({ erro: 'O parâmetro idUsuario é obrigatório.' });
+  if (!idUsuario || isNaN(Number(idUsuario))) {
+    return res.status(400).json({ erro: 'O parâmetro idUsuario é obrigatório na query.' });
   }
 
-  if (!dados || (Array.isArray(dados) && dados.length === 0) || (typeof dados === 'object' && Object.keys(dados).length === 0)) {
-    return res.status(400).json({ erro: 'Dados para atualização de receita não podem estar vazios.' });
+  if (!dados || typeof dados !== 'object' || Object.keys(dados).length === 0) {
+    return res.status(400).json({ erro: 'O corpo da requisição está vazio.' });
   }
 
-  try
-  {
-    const res = await UpdateReceitasPartial(idUsuario, dados)
-    if (res.affectedRows > 0){
-      res.status(200).json({ mensagem: 'Receita atualizada com sucesso!' })
+  if (!dados.idReceita || isNaN(Number(dados.idReceita))) {
+    return res.status(400).json({ erro: 'O campo "id" da receita é obrigatório no corpo da requisição.' });
+  }
+
+  try {
+    const resultado = await UpdateReceitasPartial(Number(idUsuario), dados);
+
+    if (resultado?.sucesso) {
+      res.status(200).json({ mensagem: 'Receita atualizada com sucesso!' });
+    } else {
+      res.status(404).json({ erro: 'Receita não encontrada ou não pertence ao usuário.' });
     }
-    else{
-      res.status(404).json({"erro": "Nenhuma receita encontrada"});
-    }
+  } catch (error) {
+    res.status(500).json({ erro: 'Erro ao atualizar a receita.', detalhes: error.message });
   }
-  catch (error)
-  {
-    res.status(500).json({erro: 'Erro na busca', error})
-  }
-
 }

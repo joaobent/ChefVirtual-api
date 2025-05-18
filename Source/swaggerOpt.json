@@ -5,11 +5,6 @@
     "description": "Documentação da API Chef Virtual",
     "version": "1.0.0"
   },
-  "servers": [
-    {
-      "url": "https://chefvirtual.dev.vilhena.ifro.edu.br/api"
-    }
-  ],
   "tags": [
     {
       "name": "Receitas",
@@ -41,7 +36,7 @@
     }
   ],
   "paths": {
-    "/api/Receitas/": {
+    "/Receitas/": {
       "get": {
         "tags": [
           "Receitas"
@@ -60,7 +55,7 @@
         }
       }
     },
-    "/api/Receitas/GetReceita": {
+    "/Receitas/GetReceita": {
       "get": {
         "tags": [
           "Receitas"
@@ -71,7 +66,7 @@
             "name": "idReceita",
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "int"
             }
           }
         ],
@@ -91,7 +86,7 @@
         }
       }
     },
-    "/api/Receitas/BuscaPorTitulo": {
+    "/Receitas/BuscaPorTitulo": {
       "get": {
         "tags": [
           "Receitas"
@@ -122,7 +117,7 @@
         }
       }
     },
-    "/api/Receitas/BuscaPorCategoria": {
+    "/Receitas/BuscaPorCategoria": {
       "get": {
         "tags": [
           "Receitas"
@@ -153,7 +148,7 @@
         }
       }
     },
-    "/api/Receitas/BuscaPorUsuario": {
+    "/Receitas/BuscaPorUsuario": {
       "get": {
         "tags": [
           "Receitas"
@@ -164,7 +159,7 @@
             "name": "idUsuario",
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "int"
             }
           }
         ],
@@ -181,12 +176,23 @@
         }
       }
     },
-    "/api/Receitas/AtualizarParcial": {
+    "/Receitas/AtualizarParcial": {
       "patch": {
         "tags": [
           "Receitas"
         ],
         "description": "Atualiza parcialmente uma receita",
+        "parameters": [
+          {
+            "name": "idUsuario",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID do usuário criador da receita"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -202,22 +208,91 @@
           }
         },
         "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "length": {
-                    "example": "any"
-                  }
-                }
+          "required": true,
+      "content": {
+  "application/json": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "idReceita": {
+          "type": "integer",
+          "example": 3
+        },
+        "titulo": {
+          "type": "string",
+          "example": "Bolo de cenoura"
+        },
+        "descricao": {
+          "type": "string",
+          "example": "Delicioso bolo com cobertura de chocolate"
+        },
+        "ingredientes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "idIngredienteDb": {
+                "type": "integer",
+                "example": 1
+              },
+              "quantidade": {
+                "type": "string",
+                "example": "2 xícaras"
+              },
+              "medida": {
+                "type": "integer",
+                "example": 1
+              },
+              "unidade": {
+                "type": "string",
+                "example": "gramas"
+              }
+            }
+          }
+        },
+        "etapas": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "numeroEtapa": {
+                "type": "integer",
+                "example": 1
+              },
+              "descricao": {
+                "type": "string",
+                "example": "Misture os ingredientes."
               }
             }
           }
         }
+      },
+      "example": {
+        "idReceita": 3,
+        "titulo": "Bolo de macarrão",
+        "descricao": "Delicioso bolo com cobertura de macarrão",
+        "ingredientes": [
+          {
+            "idIngredienteDb": 1,
+            "quantidade": "2 xícaras",
+            "medida": 1,
+            "unidade": "gramas"
+          }
+        ],
+        "etapas": [
+          {
+            "numeroEtapa": 1,
+            "descricao": "Misture os ingredientes."
+          }
+        ]
+      }
+    }
+  }
+}
+        }
       }
     },
-    "/api/Comentarios/GetComentarios": {
+    "/Comentarios/GetComentarios": {
       "get": {
         "tags": [
           "Comentários"
@@ -228,7 +303,7 @@
             "name": "idReceita",
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "int"
             }
           }
         ],
@@ -248,7 +323,7 @@
         }
       }
     },
-    "/api/Comentarios/PostComentarios": {
+    "/Comentarios/PostComentarios": {
       "post": {
         "tags": [
           "Comentários"
@@ -287,7 +362,7 @@
         }
       }
     },
-    "/api/Comentarios/DeleteComentarios": {
+    "/Comentarios/DeleteComentarios": {
       "delete": {
         "tags": [
           "Comentários"
@@ -298,7 +373,7 @@
             "name": "id",
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "int"
             }
           }
         ],
@@ -318,7 +393,7 @@
         }
       }
     },
-    "/api/Favoritos/GetFavoritos": {
+    "/Favoritos/GetFavoritos": {
       "get": {
         "tags": [
           "Favoritos"
@@ -329,7 +404,7 @@
             "name": "usuarioId",
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "int"
             }
           }
         ],
@@ -343,7 +418,7 @@
         }
       }
     },
-    "/api/Favoritos/PostFavoritos": {
+    "/Favoritos/PostFavoritos": {
       "post": {
         "tags": [
           "Favoritos"
@@ -364,10 +439,10 @@
                 "type": "object",
                 "properties": {
                   "usuarioId": {
-                    "example": "any"
+                    "example": "int"
                   },
                   "receitaId": {
-                    "example": "any"
+                    "example": "int"
                   }
                 }
               }
@@ -376,7 +451,7 @@
         }
       }
     },
-    "/api/Favoritos/PatchFavoritos": {
+    "/Favoritos/PatchFavoritos": {
       "patch": {
         "tags": [
           "Favoritos"
@@ -387,14 +462,14 @@
             "name": "usuarioId",
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "int"
             }
           },
           {
             "name": "receitaId",
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "int"
             }
           }
         ],
@@ -405,7 +480,7 @@
         }
       }
     },
-    "/api/Verificacao/codigo": {
+    "/Verificacao/codigo": {
       "get": {
         "tags": [
           "Verificação"
@@ -435,7 +510,7 @@
         }
       }
     },
-    "/api/Verificacao/GetCodigoPorEmail/": {
+    "/Verificacao/GetCodigoPorEmail/": {
       "get": {
         "tags": [
           "Verificação"
@@ -445,6 +520,7 @@
           {
             "name": "email",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -466,7 +542,7 @@
         }
       }
     },
-    "/api/Verificacao/codigo/{id}": {
+    "/Verificacao/codigo/{id}": {
       "get": {
         "tags": [
           "Verificação"
@@ -478,7 +554,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "int"
             }
           }
         ],
@@ -508,7 +584,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "int"
             }
           }
         ],
@@ -538,7 +614,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "int"
             }
           }
         ],
@@ -558,7 +634,7 @@
         }
       }
     },
-    "/api/Usuarios/": {
+    "/Usuarios/": {
       "get": {
         "tags": [
           "Usuários"
@@ -599,22 +675,22 @@
                 "type": "object",
                 "properties": {
                   "nome": {
-                    "example": "any"
+                    "example": "string"
                   },
                   "email": {
-                    "example": "any"
+                    "example": "string"
                   },
                   "facebook": {
-                    "example": "any"
+                    "example": "string"
                   },
                   "instagram": {
-                    "example": "any"
+                    "example": "string"
                   },
                   "youtube": {
-                    "example": "any"
+                    "example": "string"
                   },
                   "senha": {
-                    "example": "any"
+                    "example": "string"
                   }
                 }
               }
@@ -642,22 +718,22 @@
                 "type": "object",
                 "properties": {
                   "nome": {
-                    "example": "any"
+                    "example": "string"
                   },
                   "email": {
-                    "example": "any"
+                    "example": "string"
                   },
                   "facebook": {
-                    "example": "any"
+                    "example": "string"
                   },
                   "instagram": {
-                    "example": "any"
+                    "example": "string"
                   },
                   "youtube": {
-                    "example": "any"
+                    "example": "string"
                   },
                   "senha": {
-                    "example": "any"
+                    "example": "string"
                   }
                 }
               }
@@ -688,22 +764,22 @@
                 "type": "object",
                 "properties": {
                   "nome": {
-                    "example": "any"
+                    "example": "string"
                   },
                   "email": {
-                    "example": "any"
+                    "example": "string"
                   },
                   "facebook": {
-                    "example": "any"
+                    "example": "string"
                   },
                   "instagram": {
-                    "example": "any"
+                    "example": "string"
                   },
                   "youtube": {
-                    "example": "any"
+                    "example": "string"
                   },
                   "senha": {
-                    "example": "any"
+                    "example": "string"
                   }
                 }
               }
@@ -726,7 +802,7 @@
         }
       }
     },
-    "/api/Login/GetLogins": {
+    "/Login/GetLogins": {
       "get": {
         "tags": [
           "Login"
@@ -745,7 +821,7 @@
         }
       }
     },
-    "/api/Login/logins/{idLogin}": {
+    "/Login/logins/{idLogin}": {
       "get": {
         "tags": [
           "Login"
@@ -757,7 +833,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "int"
             }
           }
         ],
@@ -777,7 +853,7 @@
         }
       }
     },
-    "/api/Login/ConfirmarLogin": {
+    "/Login/ConfirmarLogin": {
       "get": {
         "tags": [
           "Login"
@@ -809,7 +885,7 @@
         }
       }
     },
-    "/api/Publicacao/PublicarReceita": {
+    "/Publicacao/PublicarReceita": {
       "post": {
         "tags": [
           "Publicação"
@@ -833,19 +909,19 @@
                 "type": "object",
                 "properties": {
                   "titulo": {
-                    "example": "any"
+                    "example": "string"
                   },
                   "descricao": {
-                    "example": "any"
+                    "example": "string"
                   },
                   "imagem": {
-                    "example": "any"
+                    "example": "string"
                   },
                   "tempo_preparo": {
-                    "example": "any"
+                    "example": "int"
                   },
                   "idUsuario": {
-                    "example": "any"
+                    "example": "int"
                   }
                 }
               }
@@ -854,7 +930,7 @@
         }
       }
     },
-    "/api/Publicacao/PublicarEtapa": {
+    "/Publicacao/PublicarEtapa": {
       "post": {
         "tags": [
           "Publicação"
@@ -872,25 +948,44 @@
           }
         },
         "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "idReceita": {
-                    "example": "any"
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "idReceita": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "etapas": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "numeroEtapa": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "descricao": {
+                        "type": "string",
+                        "example": "Misture os ingredientes secos."
+                      }
+                    }
                   },
-                  "etapas": {
-                    "example": "any"
-                  }
+                  "example": [
+                    { "numeroEtapa": 1, "descricao": "Misture os ingredientes secos." },
+                    { "numeroEtapa": 2, "descricao": "Adicione os ovos e mexa bem." },
+                    { "numeroEtapa": 3, "descricao": "Leve ao forno por 30 minutos." }
+                  ]
                 }
               }
             }
           }
         }
       }
+      }
     },
-    "/api/Publicacao/PublicarIngrediente": {
+    "/Publicacao/PublicarIngrediente": {
       "post": {
         "tags": [
           "Publicação"
@@ -914,10 +1009,37 @@
                 "type": "object",
                 "properties": {
                   "idReceita": {
-                    "example": "any"
+                    "type": "integer",
+                    "example": 11
                   },
                   "ingredientes": {
-                    "example": "any"
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "idIngredienteDb": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "quantidade": {
+                          "type": "string",
+                          "example": "1 xícara"
+                        },
+                        "medida": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "unidade": {
+                          "type": "string",
+                          "example": "gramas"
+                        }
+                      }
+                    },
+                    "example": [
+                      { "idIngredienteDb": 1, "quantidade": "1 xícara", "medida": 1, "unidade": "gramas" },
+                      { "idIngredienteDb": 2, "quantidade": "2 unidades", "medida": 2, "unidade": "gramas" },
+                      { "idIngredienteDb": 3, "quantidade": "3 copos", "medida": 3, "unidade": "gramas" }
+                    ]
                   }
                 }
               }
@@ -950,12 +1072,12 @@
         "type": "object",
         "properties": {
           "usuarioId": {
-            "type": "string",
-            "example": "123"
+            "type": "int",
+            "example": 3
           },
           "receitaId": {
-            "type": "string",
-            "example": "456"
+            "type": "int",
+            "example": 3
           },
           "texto": {
             "type": "string",
