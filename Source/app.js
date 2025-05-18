@@ -33,7 +33,7 @@ app.use('/api/Favoritos', favoritoRotas);
 app.use('/api/Verificacao', codigoVerificacao);
 app.use('/api/Usuarios', usuarioRouter)
 app.use('/api/Login', loginRouter)
-app.use('/api/Publicação', pubReceita); 
+app.use('/api/Publicacao', pubReceita); 
 
 
 const server = http.createServer(app);

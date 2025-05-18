@@ -217,7 +217,7 @@
         }
       }
     },
-    "/api/GetComentarios": {
+    "/api/Comentarios/GetComentarios": {
       "get": {
         "tags": [
           "Comentários"
@@ -248,7 +248,7 @@
         }
       }
     },
-    "/api/PostComentarios": {
+    "/api/Comentarios/PostComentarios": {
       "post": {
         "tags": [
           "Comentários"
@@ -287,7 +287,7 @@
         }
       }
     },
-    "/api/DeleteComentarios": {
+    "/api/Comentarios/DeleteComentarios": {
       "delete": {
         "tags": [
           "Comentários"
@@ -318,7 +318,7 @@
         }
       }
     },
-    "/api/GetFavoritos": {
+    "/api/Favoritos/GetFavoritos": {
       "get": {
         "tags": [
           "Favoritos"
@@ -343,7 +343,7 @@
         }
       }
     },
-    "/api/PostFavoritos": {
+    "/api/Favoritos/PostFavoritos": {
       "post": {
         "tags": [
           "Favoritos"
@@ -376,7 +376,7 @@
         }
       }
     },
-    "/api/PatchFavoritos": {
+    "/api/Favoritos/PatchFavoritos": {
       "patch": {
         "tags": [
           "Favoritos"
@@ -405,7 +405,7 @@
         }
       }
     },
-    "/api/codigo": {
+    "/api/Verificacao/codigo": {
       "get": {
         "tags": [
           "Verificação"
@@ -435,7 +435,7 @@
         }
       }
     },
-    "/api/GetCodigoPorEmail/": {
+    "/api/Verificacao/GetCodigoPorEmail/": {
       "get": {
         "tags": [
           "Verificação"
@@ -466,7 +466,7 @@
         }
       }
     },
-    "/api/codigo/{id}": {
+    "/api/Verificacao/codigo/{id}": {
       "get": {
         "tags": [
           "Verificação"
@@ -726,7 +726,7 @@
         }
       }
     },
-    "/api/GetLogins": {
+    "/api/Login/GetLogins": {
       "get": {
         "tags": [
           "Login"
@@ -745,7 +745,7 @@
         }
       }
     },
-    "/api/logins/{idLogin}": {
+    "/api/Login/logins/{idLogin}": {
       "get": {
         "tags": [
           "Login"
@@ -777,7 +777,7 @@
         }
       }
     },
-    "/api/ConfirmarLogin": {
+    "/api/Login/ConfirmarLogin": {
       "get": {
         "tags": [
           "Login"
@@ -809,7 +809,7 @@
         }
       }
     },
-    "/api/PublicarReceita": {
+    "/api/Publicacao/PublicarReceita": {
       "post": {
         "tags": [
           "Publicação"
@@ -854,7 +854,7 @@
         }
       }
     },
-    "/api/PublicarEtapa": {
+    "/api/Publicacao/PublicarEtapa": {
       "post": {
         "tags": [
           "Publicação"
@@ -890,7 +890,7 @@
         }
       }
     },
-    "/api/PublicarIngrediente": {
+    "/api/Publicacao/PublicarIngrediente": {
       "post": {
         "tags": [
           "Publicação"
