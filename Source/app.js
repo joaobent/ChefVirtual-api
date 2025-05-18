@@ -26,14 +26,14 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
 }));
 
 app.use(express.json());
-app.use('/api', receitasRotas); // prefixa as rotas das receitas com /api
-app.use('/api', categoriaRotas);
-app.use('/api', comentariosRotas);
-app.use('/api', favoritoRotas);
-app.use('/api', codigoVerificacao);
-app.use('/api', usuarioRouter)
-app.use('/api', loginRouter)
-app.use('/api', pubReceita); 
+app.use('/api/Receitas', receitasRotas); // prefixa as rotas das receitas com /api
+app.use('/api/Categorias', categoriaRotas);
+app.use('/api/Comentarios', comentariosRotas);
+app.use('/api/Favoritos', favoritoRotas);
+app.use('/api/Verificacao', codigoVerificacao);
+app.use('/api/Usuarios', usuarioRouter)
+app.use('/api/Login', loginRouter)
+app.use('/api/Publicação', pubReceita); 
 
 
 const server = http.createServer(app);

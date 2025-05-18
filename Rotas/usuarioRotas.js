@@ -4,50 +4,50 @@ import { getUsuarios, getUsuarioByTitle, getUsuarioById, patchUsuario, postUsuar
 
 const usuarioRouter = express.Router();
 
-usuarioRouter.get('/usuarios', 
+usuarioRouter.get('/', 
     getUsuarios
     // #swagger.tags = ['Usuários']
     // #swagger.description = 'Retorna todos os Usuários do banco'
 );
 
-usuarioRouter.get('/usuarios/pesquisa/nome', 
+usuarioRouter.get('/', 
     getUsuarioByTitle
     // #swagger.tags = ['Usuários']
     // #swagger.description = 'Retorna todos os Usuários do banco buscando por nome'
 );
 
-usuarioRouter.get('/usuarios/pesquisa/email', 
+usuarioRouter.get('/', 
     getUsuarioByEmail
     // #swagger.tags = ['Usuários']
     // #swagger.description = 'Retorna todos os Usuários do banco buscando por email'
 );
 
-usuarioRouter.get('/usuarios/:idUsuario', 
+usuarioRouter.get('/', 
     getUsuarioById
     // #swagger.tags = ['Usuários']
     // #swagger.description = 'Retorna todos os Usuários do banco buscando por id'
 );
 
-usuarioRouter.post('/usuarios', 
+usuarioRouter.post('/', 
     upload.single('imagemUsuario'), 
     postUsuario
     // #swagger.tags = ['Usuários']
     // #swagger.description = 'Adiciona um Usuário no banco'
 );
-usuarioRouter.put('/usuarios/:id', 
+usuarioRouter.put('/', 
     upload.single('imagemUsuario'),  
     putUsuario
     // #swagger.tags = ['Usuários']
     // #swagger.description = 'Substitui todos os dados de um Usuário no banco'
 );         
 
-usuarioRouter.patch('/usuarios/:id', 
+usuarioRouter.patch('/', 
     upload.single('imagemUsuario'), 
     patchUsuario
     // #swagger.tags = ['Usuários']
     // #swagger.description = 'Atualiza parcialmente os dados de um Usuário no banco'
 );     
-usuarioRouter.delete('/usuarios/:id', 
+usuarioRouter.delete('/', 
     deleteUsuario
     // #swagger.tags = ['Usuários']
     // #swagger.description = 'Deleta um Usuário a partir de seu id'

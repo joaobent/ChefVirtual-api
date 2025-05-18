@@ -5,11 +5,6 @@
     "description": "Documentação da API Chef Virtual",
     "version": "1.0.0"
   },
-  "servers": [
-    {
-      "url": "https://chefvirtual.dev.vilhena.ifro.edu.br/api"
-    }
-  ],
   "tags": [
     {
       "name": "Receitas",
@@ -41,7 +36,7 @@
     }
   ],
   "paths": {
-    "/Receitas": {
+    "/api/Receitas/": {
       "get": {
         "tags": [
           "Receitas"
@@ -60,7 +55,7 @@
         }
       }
     },
-    "/Receita/GetReceita": {
+    "/api/Receitas/GetReceita": {
       "get": {
         "tags": [
           "Receitas"
@@ -91,7 +86,7 @@
         }
       }
     },
-    "/Receitas/BuscaPorTitulo": {
+    "/api/Receitas/BuscaPorTitulo": {
       "get": {
         "tags": [
           "Receitas"
@@ -122,7 +117,7 @@
         }
       }
     },
-    "/Receitas/BuscaPorCategoria": {
+    "/api/Receitas/BuscaPorCategoria": {
       "get": {
         "tags": [
           "Receitas"
@@ -153,7 +148,7 @@
         }
       }
     },
-    "/Receitas/BuscaPorUsuario": {
+    "/api/Receitas/BuscaPorUsuario": {
       "get": {
         "tags": [
           "Receitas"
@@ -181,7 +176,7 @@
         }
       }
     },
-    "/Receitas/AtualizarParcial": {
+    "/api/Receitas/AtualizarParcial": {
       "patch": {
         "tags": [
           "Receitas"
@@ -217,7 +212,7 @@
         }
       }
     },
-    "/GetComentarios": {
+    "/api/GetComentarios": {
       "get": {
         "tags": [
           "Comentários"
@@ -248,7 +243,7 @@
         }
       }
     },
-    "/PostComentarios": {
+    "/api/PostComentarios": {
       "post": {
         "tags": [
           "Comentários"
@@ -287,7 +282,7 @@
         }
       }
     },
-    "/DeleteComentarios": {
+    "/api/DeleteComentarios": {
       "delete": {
         "tags": [
           "Comentários"
@@ -318,7 +313,7 @@
         }
       }
     },
-    "/GetFavoritos": {
+    "/api/GetFavoritos": {
       "get": {
         "tags": [
           "Favoritos"
@@ -343,7 +338,7 @@
         }
       }
     },
-    "/PostFavoritos": {
+    "/api/PostFavoritos": {
       "post": {
         "tags": [
           "Favoritos"
@@ -376,7 +371,7 @@
         }
       }
     },
-    "/PatchFavoritos": {
+    "/api/PatchFavoritos": {
       "patch": {
         "tags": [
           "Favoritos"
@@ -405,7 +400,7 @@
         }
       }
     },
-    "/codigo": {
+    "/api/codigo": {
       "get": {
         "tags": [
           "Verificação"
@@ -435,7 +430,7 @@
         }
       }
     },
-    "/GetCodigoPorEmail/": {
+    "/api/GetCodigoPorEmail/": {
       "get": {
         "tags": [
           "Verificação"
@@ -466,7 +461,7 @@
         }
       }
     },
-    "/codigo/{id}": {
+    "/api/codigo/{id}": {
       "get": {
         "tags": [
           "Verificação"
@@ -558,15 +553,18 @@
         }
       }
     },
-    "/usuarios": {
+    "/api/Usuarios/": {
       "get": {
         "tags": [
           "Usuários"
         ],
-        "description": "Retorna todos os Usuários do banco",
+        "description": "Retorna todos os Usuários do banco buscando por id",
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "404": {
             "description": "Not Found"
@@ -618,118 +616,12 @@
             }
           }
         }
-      }
-    },
-    "/usuarios/pesquisa/nome": {
-      "get": {
-        "tags": [
-          "Usuários"
-        ],
-        "description": "Retorna todos os Usuários do banco buscando por nome",
-        "parameters": [
-          {
-            "name": "nome",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/usuarios/pesquisa/email": {
-      "get": {
-        "tags": [
-          "Usuários"
-        ],
-        "description": "Retorna todos os Usuários do banco buscando por email",
-        "parameters": [
-          {
-            "name": "email",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/usuarios/{idUsuario}": {
-      "get": {
-        "tags": [
-          "Usuários"
-        ],
-        "description": "Retorna todos os Usuários do banco buscando por id",
-        "parameters": [
-          {
-            "name": "idUsuario",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/usuarios/{id}": {
+      },
       "put": {
         "tags": [
           "Usuários"
         ],
         "description": "Substitui todos os dados de um Usuário no banco",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -773,16 +665,6 @@
           "Usuários"
         ],
         "description": "Atualiza parcialmente os dados de um Usuário no banco",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -829,16 +711,6 @@
           "Usuários"
         ],
         "description": "Deleta um Usuário a partir de seu id",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -849,7 +721,7 @@
         }
       }
     },
-    "/GetLogins": {
+    "/api/GetLogins": {
       "get": {
         "tags": [
           "Login"
@@ -868,7 +740,7 @@
         }
       }
     },
-    "/logins/{idLogin}": {
+    "/api/logins/{idLogin}": {
       "get": {
         "tags": [
           "Login"
@@ -900,7 +772,7 @@
         }
       }
     },
-    "/ConfirmarLogin": {
+    "/api/ConfirmarLogin": {
       "get": {
         "tags": [
           "Login"
@@ -932,7 +804,7 @@
         }
       }
     },
-    "/PublicarReceita": {
+    "/api/PublicarReceita": {
       "post": {
         "tags": [
           "Publicação"
@@ -977,7 +849,7 @@
         }
       }
     },
-    "/PublicarEtapa": {
+    "/api/PublicarEtapa": {
       "post": {
         "tags": [
           "Publicação"
@@ -1013,7 +885,7 @@
         }
       }
     },
-    "/PublicarIngrediente": {
+    "/api/PublicarIngrediente": {
       "post": {
         "tags": [
           "Publicação"
