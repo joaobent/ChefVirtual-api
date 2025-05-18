@@ -5,6 +5,11 @@
     "description": "Documentação da API Chef Virtual",
     "version": "1.0.0"
   },
+  "servers": [
+    {
+      "url": "https://chefvirtual.dev.vilhena.ifro.edu.br/api"
+    }
+  ],
   "tags": [
     {
       "name": "Receitas",
