@@ -1,56 +1,36 @@
 import pool from '../config/conexao.js'
 import { executaQuery } from '../config/dbInstance.js'
 
-export async function GetAllComentarios() {
+export async function GetAllComentarios(idReceita) {
     const conexao = await pool.getConnection()
     try {
-        const query = `SELECT * FROM comentarios;`
-        const resposta = await executaQuery(conexao, query)
+        const query = `SELECT * FROM comentarios WHERE receita_id = ?`
+        const resposta = await executaQuery(conexao, query, [idReceita])
+
         const res = resposta.map(comentario => ({
-            id: comentario.id,
-            receitaId: comentario.receita_id,
+            receitaId: idReceita,
             usuarioId: comentario.usuario_id,
             comentario: comentario.comentario
         }))
+
         return res;
 
     } catch (error) {
-        console.log(error)
+        throw new Error("Erro ao realizar operação.")
     } finally {
         conexao.release()
     }
 }
-
-
-export async function GetComentariosById(id) {
-    const conexao = await pool.getConnection()
-    try {
-        const query = `SELECT * FROM comentario WHERE id = ?;`
-        const resposta = await executaQuery(conexao, query, [id])
-        const res = resposta.map(comentario => ({
-            id: comentario.id,
-            receitaId: comentario.receita_id,
-            usuarioId: comentario.usuario_id,
-            comentario: comentario.comentario
-        }))
-        return res;
-
-    } catch (error) {
-        console.log(error)
-    } finally {
-        conexao.release()
-    }
-}
-
 
 export async function PostComentario(receitaId, usuarioId, comentario) {
     const conexao = await pool.getConnection()
     try {
-        const query = `INSERT INTO comentario (receita_id, usuario_id, comentario) VALUES (?, ?, ?);`
-        const resposta = await executaQuery(conexao, query, [receitaId, usuarioId, comentario])
+        const query = `INSERT INTO comentarios (usuario_id, receita_id, comentario) VALUES (?, ?, ?);`
+        const resposta = await executaQuery(conexao, query, [usuarioId, receitaId, comentario])
         return resposta;
     } catch (error) {
         console.log(error)
+        throw new Error("Erro ao realizar operação")
     } finally {
         conexao.release()
     }
@@ -59,7 +39,7 @@ export async function PostComentario(receitaId, usuarioId, comentario) {
 export async function DeleteComentario(id) {
     const conexao = await pool.getConnection()
     try {
-        const query = `DELETE FROM comentario WHERE id = ?;`
+        const query = `DELETE FROM comentarios WHERE id = ?;`
         const resposta = await executaQuery(conexao, query, [id])
         return resposta;
     } catch (error) {

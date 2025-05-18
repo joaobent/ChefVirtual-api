@@ -97,8 +97,15 @@ async function GetUsuarioById(id) {
 async function PostUsuario(nome, email, imagem, facebook, instagram, youtube) {
     const conexao = await pool.getConnection();
     try {
+        const user = await GetUsuarioByEmail(email)
+        if (user.length > 0)
+        {
+            throw new Error('Ja existe um usuário cadastrado para este email')
+        }
+
         const query = `INSERT INTO usuario (nome, email, imagem, facebook, instagram, youtube) VALUES (?, ?, ?, ?, ?, ?)`;
         const resposta = await executaQuery(conexao, query, [nome, email, imagem, facebook, instagram, youtube]);
+
         return resposta;
     } catch (error) {
         console.log(error);

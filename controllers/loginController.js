@@ -4,7 +4,8 @@ import {
   PostLogin,
   PutLogin,
   DeleteLogin,
-  PatchLogin
+  PatchLogin,
+  ConfirmarLogin
 } from "../Consultas/login.js";
 
 export async function getLogins(req, res) {
@@ -38,14 +39,32 @@ export async function getLoginById(req, res) {
   }
 }
 
+export async function confirmarLogin(req, res) {
+  const { email, codigoVerificacao } = req.query;
+  if (typeof email === 'string' && email.includes('@') && email.includes('.') && !codigoVerificacao) {
+    return res.status(400).json({ erro: 'Parâmetros estão faltantes' });
+  }
+
+  try 
+  {
+    const { token } = await ConfirmarLogin(email, codigoVerificacao);
+    res.status(200).json({ mensagem: 'Login confirmado com sucesso', token: token });
+  } 
+  catch (error)
+  {
+    res.status(400).json({ erro: error.message });
+  }
+}
+
+
 export async function postLogin(req, res) {
-  const { email, senha, codigo_verificacao_id } = req.body;
+  const { email, senha } = req.body;
   try {
-    const resultado = await PostLogin(email, senha, codigo_verificacao_id);
+    const resultado = await PostLogin(email, senha);
     res.status(201).json({ mensagem: 'Login criado com sucesso', id: resultado.insertId });
   } catch (error) {
     console.error('Erro ao criar login:', error);
-    res.status(500).json({ erro: 'Erro ao criar login' });
+    res.status(500).json({ erro: error.message });
   }
 }
 

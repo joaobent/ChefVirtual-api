@@ -1,6 +1,5 @@
 import express from 'express'
 import {
-    listarTodosFavoritos,
     listarFavoritosUsuario,
     adicionarFavorito,
     atualizarFavorito
@@ -8,9 +7,22 @@ import {
 
 const router = express.Router()
 
-router.get('/favoritos', listarTodosFavoritos)
-router.get('/favoritos/:usuarioId', listarFavoritosUsuario)
-router.post('/favoritos', adicionarFavorito)
-router.patch('/favoritos/:usuarioId/:receitaId', atualizarFavorito)
+router.get('/GetFavoritos', (req, res) => {
+    // #swagger.tags = ['Favoritos']
+    // #swagger.description = 'Lista todas as receitas favoritas de um usuário'
+    listarFavoritosUsuario(req, res)
+})
+
+router.post('/PostFavoritos', 
+    adicionarFavorito 
+    // #swagger.tags = ['Favoritos']
+    // #swagger.description = 'Adicionar favorito a uma receita'
+)
+
+router.patch('/PatchFavoritos', (req, res) => {
+    // #swagger.tags = ['Favoritos']
+    // #swagger.description = 'Atualizar o status de favorito de uma receita (remover ou adicionar favorito se já existir o registro no db)'
+    atualizarFavorito(req, res)
+})
 
 export default router

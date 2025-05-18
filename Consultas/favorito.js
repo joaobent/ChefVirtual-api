@@ -32,6 +32,20 @@ export async function GetFavoritosPorUsuario(usuarioId) {
     }
 }
 
+export async function GetFavoritosUsuarioReceita(usuarioId, receitaId) {
+    const conexao = await pool.getConnection()
+    try {
+        const query = `
+            SELECT f.usuario_id, f.receita_id
+            FROM favoritos f
+            WHERE f.usuario_id = ? AND f.receita_id = ?
+        `
+        return await executaQuery(conexao, query, [usuarioId, receitaId])
+    } finally {
+        conexao.release()
+    }
+}
+
 export async function InserirFavorito(usuarioId, receitaId) {
     const conexao = await pool.getConnection()
     try {

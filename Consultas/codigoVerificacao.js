@@ -32,6 +32,38 @@ async function GetAllCodigosVerificacao() {
   }
 }
 
+async function GetCodigoVerificacaoByEmail(email) {
+  const conexao = await pool.getConnection();
+  try {
+    const query = `
+                  SELECT 
+                    c.* 
+                  FROM codigo_verificacao AS c
+                  INNER JOIN login AS l ON l.codigo_verificacao_id = c.id
+                  WHERE l.email = ?
+                  ORDER BY c.id DESC
+                  LIMIT 1
+                  `
+    const resposta = await executaQuery(conexao, query, [email]);
+
+    if (resposta.length === 0) 
+      throw new Error('Código de verificação não encontrado para o login informado')
+
+    const codigo = resposta[0];
+
+    console.log(codigo.codigo_verificacao)
+    return {
+      id: codigo.id,
+      codigo_verificacao: codigo.codigo_verificacao
+    };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  } finally {
+    conexao.release();
+  }
+}
+
 // Retorna um código pelo ID
 async function GetCodigoVerificacaoById(id) {
   const conexao = await pool.getConnection();
@@ -110,6 +142,7 @@ async function DeleteCodigoVerificacao(id) {
 // Exporta todas as funções
 export {
   GetAllCodigosVerificacao,
+  GetCodigoVerificacaoByEmail,
   GetCodigoVerificacaoById,
   PostCodigoVerificacao,
   PutCodigoVerificacao,

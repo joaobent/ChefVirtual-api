@@ -4,13 +4,53 @@ import { getUsuarios, getUsuarioByTitle, getUsuarioById, patchUsuario, postUsuar
 
 const usuarioRouter = express.Router();
 
-usuarioRouter.get('/usuarios', getUsuarios);
-usuarioRouter.get('/usuarios/pesquisa/nome', getUsuarioByTitle);
-usuarioRouter.get('/usuarios/pesquisa/email', getUsuarioByEmail);
-usuarioRouter.get('/usuarios/:idUsuario', getUsuarioById);
-usuarioRouter.post('/usuarios', upload.single('imagemUsuario'), postUsuario);   
-usuarioRouter.put('/usuarios/:id', upload.single('imagemUsuario'),  putUsuario);         
-usuarioRouter.patch('/usuarios/:id', upload.single('imagemUsuario'), patchUsuario);     
-usuarioRouter.delete('/usuarios/:id', deleteUsuario); 
+usuarioRouter.get('/usuarios', 
+    getUsuarios
+    // #swagger.tags = ['Usuários']
+    // #swagger.description = 'Retorna todos os Usuários do banco'
+);
+
+usuarioRouter.get('/usuarios/pesquisa/nome', 
+    getUsuarioByTitle
+    // #swagger.tags = ['Usuários']
+    // #swagger.description = 'Retorna todos os Usuários do banco buscando por nome'
+);
+
+usuarioRouter.get('/usuarios/pesquisa/email', 
+    getUsuarioByEmail
+    // #swagger.tags = ['Usuários']
+    // #swagger.description = 'Retorna todos os Usuários do banco buscando por email'
+);
+
+usuarioRouter.get('/usuarios/:idUsuario', 
+    getUsuarioById
+    // #swagger.tags = ['Usuários']
+    // #swagger.description = 'Retorna todos os Usuários do banco buscando por id'
+);
+
+usuarioRouter.post('/usuarios', 
+    upload.single('imagemUsuario'), 
+    postUsuario
+    // #swagger.tags = ['Usuários']
+    // #swagger.description = 'Adiciona um Usuário no banco'
+);
+usuarioRouter.put('/usuarios/:id', 
+    upload.single('imagemUsuario'),  
+    putUsuario
+    // #swagger.tags = ['Usuários']
+    // #swagger.description = 'Substitui todos os dados de um Usuário no banco'
+);         
+
+usuarioRouter.patch('/usuarios/:id', 
+    upload.single('imagemUsuario'), 
+    patchUsuario
+    // #swagger.tags = ['Usuários']
+    // #swagger.description = 'Atualiza parcialmente os dados de um Usuário no banco'
+);     
+usuarioRouter.delete('/usuarios/:id', 
+    deleteUsuario
+    // #swagger.tags = ['Usuários']
+    // #swagger.description = 'Deleta um Usuário a partir de seu id'
+); 
 
 export default usuarioRouter;

@@ -3,7 +3,8 @@ import {
   GetCodigoVerificacaoById,
   PostCodigoVerificacao,
   PutCodigoVerificacao,
-  DeleteCodigoVerificacao
+  DeleteCodigoVerificacao,
+  GetCodigoVerificacaoByEmail
 } from '../Consultas/codigoVerificacao.js';
 
 async function listarCodigos(req, res) {
@@ -12,6 +13,23 @@ async function listarCodigos(req, res) {
     res.status(200).json(codigos);
   } catch (error) {
     res.status(500).json({ erro: 'Erro ao buscar códigos de verificação' });
+  }
+}
+
+async function buscarCodigoPorEmail(req, res) {
+  const {email} = req.query
+
+  if (typeof email !== 'string' && !email.includes('@') && !email.includes('.')) 
+    return res.status(400).json({ erro: 'ID inválido' });
+
+  try {
+    const codigo = await GetCodigoVerificacaoByEmail(email);
+    if (!codigo) {
+      return res.status(404).json({ erro: 'Código com o ID informado não foi encontrado' });
+    }
+    res.status(200).json(codigo);
+  } catch (error) {
+    res.status(500).json({ erro: 'Erro ao buscar o código' });
   }
 }
 
@@ -75,6 +93,7 @@ async function deletarCodigo(req, res) {
 
 export {
   listarCodigos,
+  buscarCodigoPorEmail,
   buscarCodigoPorId,
   criarCodigo,
   atualizarCodigo,

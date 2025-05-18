@@ -15,11 +15,12 @@ const doc = {
   schemes: ['http'],
   tags: [
     { name: 'Receitas', description: 'Operações relacionadas às receitas' },
-    { name: 'Categorias', description: 'Operações relacionadas às categorias' },
     { name: 'Comentários', description: 'Operações relacionadas aos comentários' },
     { name: 'Favoritos', description: 'Operações relacionadas aos favoritos' },
     { name: 'Usuários', description: 'Operações relacionadas aos usuários' },
-    { name: 'Login', description: 'Operações relacionadas ao login' }
+    { name: 'Login', description: 'Operações relacionadas ao login' },
+    { name: 'Verificação', description: 'Operações relacionadas ao código de verificação.\nController relacionado com o fluxo de login' },
+    { name: 'Publicação', description: 'Operações relacionadas à publicação de receitas' }
   ],
   definitions: {
     ReceitaPatch: {

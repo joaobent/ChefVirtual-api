@@ -7,17 +7,13 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000/"
+      "url": "https://chefvirtual.dev.vilhena.ifro.edu.br/api/"
     }
   ],
   "tags": [
     {
       "name": "Receitas",
       "description": "Operações relacionadas às receitas"
-    },
-    {
-      "name": "Categorias",
-      "description": "Operações relacionadas às categorias"
     },
     {
       "name": "Comentários",
@@ -34,6 +30,14 @@
     {
       "name": "Login",
       "description": "Operações relacionadas ao login"
+    },
+    {
+      "name": "Verificação",
+      "description": "Operações relacionadas ao código de verificação.\nController relacionado com o fluxo de login"
+    },
+    {
+      "name": "Publicação",
+      "description": "Operações relacionadas à publicação de receitas"
     }
   ],
   "paths": {
@@ -213,23 +217,49 @@
         }
       }
     },
-    "/comentarios": {
+    "/GetComentarios": {
       "get": {
-        "description": "",
+        "tags": [
+          "Comentários"
+        ],
+        "description": "Lista todos os comentários de uma receita ",
+        "parameters": [
+          {
+            "name": "idReceita",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
           }
         }
-      },
+      }
+    },
+    "/PostComentarios": {
       "post": {
-        "description": "",
+        "tags": [
+          "Comentários"
+        ],
+        "description": "Inserir um novo comentário a uma receita.",
         "responses": {
           "201": {
             "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "500": {
             "description": "Internal Server Error"
@@ -257,43 +287,30 @@
         }
       }
     },
-    "/comentarios/{id}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
+    "/DeleteComentarios": {
       "delete": {
-        "description": "",
+        "tags": [
+          "Comentários"
+        ],
+        "description": "Inserir um novo comentário a uma receita.",
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "required": true,
+            "in": "query",
             "schema": {
               "type": "string"
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -301,17 +318,37 @@
         }
       }
     },
-    "/favoritos": {
+    "/GetFavoritos": {
       "get": {
-        "description": "",
+        "tags": [
+          "Favoritos"
+        ],
+        "description": "Lista todas as receitas favoritas de um usuário",
+        "parameters": [
+          {
+            "name": "usuarioId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
-      },
+      }
+    },
+    "/PostFavoritos": {
       "post": {
-        "description": "",
+        "tags": [
+          "Favoritos"
+        ],
+        "description": "Adicionar favorito a uma receita",
         "responses": {
           "201": {
             "description": "Created"
@@ -326,10 +363,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "usuario_id": {
+                  "usuarioId": {
                     "example": "any"
                   },
-                  "receita_id": {
+                  "receitaId": {
                     "example": "any"
                   }
                 }
@@ -339,45 +376,75 @@
         }
       }
     },
-    "/favoritos/{usuarioId}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "usuarioId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/favoritos/{usuarioId}/{receitaId}": {
+    "/PatchFavoritos": {
       "patch": {
-        "description": "",
+        "tags": [
+          "Favoritos"
+        ],
+        "description": "Atualizar o status de favorito de uma receita (remover ou adicionar favorito se já existir o registro no db)",
         "parameters": [
           {
             "name": "usuarioId",
-            "in": "path",
-            "required": true,
+            "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
             "name": "receitaId",
-            "in": "path",
-            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/codigo": {
+      "get": {
+        "tags": [
+          "Verificação"
+        ],
+        "description": "Realiza a busca de todos os códigos de verificação.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Verificação"
+        ],
+        "description": "Cria um código de verificação a partir de um login realizado.",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/GetCodigoPorEmail/": {
+      "get": {
+        "tags": [
+          "Verificação"
+        ],
+        "description": "Realiza a busca do código de verificação a partir do login realizado.",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
             "schema": {
               "type": "string"
             }
@@ -389,44 +456,9 @@
           },
           "400": {
             "description": "Bad Request"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "novoUsuarioId": {
-                    "example": "any"
-                  },
-                  "novaReceitaId": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/codigo": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
           },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "post": {
-        "description": "",
-        "responses": {
-          "201": {
-            "description": "Created"
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -436,7 +468,10 @@
     },
     "/codigo/{id}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Verificação"
+        ],
+        "description": "Realiza a busca do código de verificação por seu id.",
         "parameters": [
           {
             "name": "id",
@@ -463,7 +498,10 @@
         }
       },
       "put": {
-        "description": "",
+        "tags": [
+          "Verificação"
+        ],
+        "description": "Realiza a atualização do código de verificação (se em algum momento for necessário).",
         "parameters": [
           {
             "name": "id",
@@ -490,7 +528,10 @@
         }
       },
       "delete": {
-        "description": "",
+        "tags": [
+          "Verificação"
+        ],
+        "description": "Deleta o código de verificação após o usuário verificar sua conta com seu devido código. Feito isso para diminuir registros no banco",
         "parameters": [
           {
             "name": "id",
@@ -519,7 +560,10 @@
     },
     "/usuarios": {
       "get": {
-        "description": "",
+        "tags": [
+          "Usuários"
+        ],
+        "description": "Retorna todos os Usuários do banco",
         "responses": {
           "200": {
             "description": "OK"
@@ -533,7 +577,10 @@
         }
       },
       "post": {
-        "description": "",
+        "tags": [
+          "Usuários"
+        ],
+        "description": "Adiciona um Usuário no banco",
         "responses": {
           "201": {
             "description": "Created"
@@ -575,7 +622,10 @@
     },
     "/usuarios/pesquisa/nome": {
       "get": {
-        "description": "",
+        "tags": [
+          "Usuários"
+        ],
+        "description": "Retorna todos os Usuários do banco buscando por nome",
         "parameters": [
           {
             "name": "nome",
@@ -603,7 +653,10 @@
     },
     "/usuarios/pesquisa/email": {
       "get": {
-        "description": "",
+        "tags": [
+          "Usuários"
+        ],
+        "description": "Retorna todos os Usuários do banco buscando por email",
         "parameters": [
           {
             "name": "email",
@@ -631,7 +684,10 @@
     },
     "/usuarios/{idUsuario}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Usuários"
+        ],
+        "description": "Retorna todos os Usuários do banco buscando por id",
         "parameters": [
           {
             "name": "idUsuario",
@@ -660,7 +716,10 @@
     },
     "/usuarios/{id}": {
       "put": {
-        "description": "",
+        "tags": [
+          "Usuários"
+        ],
+        "description": "Substitui todos os dados de um Usuário no banco",
         "parameters": [
           {
             "name": "id",
@@ -710,7 +769,10 @@
         }
       },
       "patch": {
-        "description": "",
+        "tags": [
+          "Usuários"
+        ],
+        "description": "Atualiza parcialmente os dados de um Usuário no banco",
         "parameters": [
           {
             "name": "id",
@@ -763,7 +825,10 @@
         }
       },
       "delete": {
-        "description": "",
+        "tags": [
+          "Usuários"
+        ],
+        "description": "Deleta um Usuário a partir de seu id",
         "parameters": [
           {
             "name": "id",
@@ -784,9 +849,12 @@
         }
       }
     },
-    "/logins": {
+    "/GetLogins": {
       "get": {
-        "description": "",
+        "tags": [
+          "Login"
+        ],
+        "description": "Retorna todos os registros de login do banco",
         "responses": {
           "200": {
             "description": "OK"
@@ -798,42 +866,14 @@
             "description": "Internal Server Error"
           }
         }
-      },
-      "post": {
-        "description": "",
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "example": "any"
-                  },
-                  "senha": {
-                    "example": "any"
-                  },
-                  "codigo_verificacao_id": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
       }
     },
     "/logins/{idLogin}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Login"
+        ],
+        "description": "Retorna um regristro de login do banco a partir do id",
         "parameters": [
           {
             "name": "idLogin",
@@ -860,14 +900,23 @@
         }
       }
     },
-    "/logins/{id}": {
-      "put": {
-        "description": "",
+    "/ConfirmarLogin": {
+      "get": {
+        "tags": [
+          "Login"
+        ],
+        "description": "Retorna o JWT para a autenticação e efetuação do login a partir do código verificação para o registro de login informado",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "email",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "codigoVerificacao",
+            "in": "query",
             "schema": {
               "type": "string"
             }
@@ -877,46 +926,21 @@
           "200": {
             "description": "OK"
           },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "example": "any"
-                  },
-                  "senha": {
-                    "example": "any"
-                  },
-                  "codigo_verificacao_id": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
+          "400": {
+            "description": "Bad Request"
           }
         }
-      },
-      "patch": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
+      }
+    },
+    "/PublicarReceita": {
+      "post": {
+        "tags": [
+          "Publicação"
         ],
+        "description": "Realiza a publicação de receita",
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Created"
           },
           "400": {
             "description": "Bad Request"
@@ -931,13 +955,19 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": {
+                  "titulo": {
                     "example": "any"
                   },
-                  "senha": {
+                  "descricao": {
                     "example": "any"
                   },
-                  "codigo_verificacao_id": {
+                  "imagem": {
+                    "example": "any"
+                  },
+                  "tempo_preparo": {
+                    "example": "any"
+                  },
+                  "idUsuario": {
                     "example": "any"
                   }
                 }
@@ -945,25 +975,76 @@
             }
           }
         }
-      },
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
+      }
+    },
+    "/PublicarEtapa": {
+      "post": {
+        "tags": [
+          "Publicação"
         ],
+        "description": "Realiza a publicação das etapas de uma receita. Deve ser executada simultaneamente a publicação de receita e ingrediente",
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "500": {
             "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "idReceita": {
+                    "example": "any"
+                  },
+                  "etapas": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PublicarIngrediente": {
+      "post": {
+        "tags": [
+          "Publicação"
+        ],
+        "description": "Realiza a publicação dos ingredientes de uma receita. Deve ser executada simultaneamente a publicação de receita e etapa",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "idReceita": {
+                    "example": "any"
+                  },
+                  "ingredientes": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }

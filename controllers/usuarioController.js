@@ -86,6 +86,12 @@ export async function postUsuario(req, res) {
   const imagemUsuario = req.file ? req.file.buffer : null;
 
   try {
+    const usuario = GetUsuarioByEmail(email)
+    if(usuario.length > 0)
+    {
+      throw new Error('Email já registrado')
+    }
+
     const resultado = await PostUsuario(nome, email, imagemUsuario, facebook, instagram, youtube);
     const resultadoLogin = await PostLogin(email, senha, resultado.insertId);
 
@@ -96,7 +102,7 @@ export async function postUsuario(req, res) {
     });
   } catch (error) {
     console.error('Erro ao criar usuário:', error);
-    res.status(500).json({ erro: 'Erro ao criar usuário' });
+    res.status(500).json({ erro: error.message });
   }
 }
 
