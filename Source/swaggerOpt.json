@@ -5,12 +5,6 @@
     "description": "Documentação da API Chef Virtual",
     "version": "1.0.0"
   },
-  "servers": [
-    {
-      "title": "API Chef Virtual",
-      "url": "https://chefvirtual.dev.vilhena.ifro.edu.br/api/"
-    }
-  ],
   "tags": [
     {
       "name": "Receitas",
@@ -42,7 +36,7 @@
     }
   ],
   "paths": {
-    "/api/Receitas": {
+    "/Receitas": {
       "get": {
         "tags": [
           "Receitas"
@@ -61,7 +55,7 @@
         }
       }
     },
-    "/api/Receita/GetReceita": {
+    "/Receita/GetReceita": {
       "get": {
         "tags": [
           "Receitas"
@@ -92,7 +86,7 @@
         }
       }
     },
-    "/api/Receitas/BuscaPorTitulo": {
+    "/Receitas/BuscaPorTitulo": {
       "get": {
         "tags": [
           "Receitas"
@@ -123,7 +117,7 @@
         }
       }
     },
-    "/api/Receitas/BuscaPorCategoria": {
+    "/Receitas/BuscaPorCategoria": {
       "get": {
         "tags": [
           "Receitas"
@@ -154,7 +148,7 @@
         }
       }
     },
-    "/api/Receitas/BuscaPorUsuario": {
+    "/Receitas/BuscaPorUsuario": {
       "get": {
         "tags": [
           "Receitas"
@@ -182,7 +176,7 @@
         }
       }
     },
-    "/api/Receitas/AtualizarParcial": {
+    "/Receitas/AtualizarParcial": {
       "patch": {
         "tags": [
           "Receitas"
@@ -218,7 +212,7 @@
         }
       }
     },
-    "/api/GetComentarios": {
+    "/GetComentarios": {
       "get": {
         "tags": [
           "Comentários"
@@ -249,7 +243,7 @@
         }
       }
     },
-    "/api/PostComentarios": {
+    "/PostComentarios": {
       "post": {
         "tags": [
           "Comentários"
@@ -288,7 +282,7 @@
         }
       }
     },
-    "/api/DeleteComentarios": {
+    "/DeleteComentarios": {
       "delete": {
         "tags": [
           "Comentários"
@@ -319,7 +313,7 @@
         }
       }
     },
-    "/api/GetFavoritos": {
+    "/GetFavoritos": {
       "get": {
         "tags": [
           "Favoritos"
@@ -344,7 +338,7 @@
         }
       }
     },
-    "/api/PostFavoritos": {
+    "/PostFavoritos": {
       "post": {
         "tags": [
           "Favoritos"
@@ -377,7 +371,7 @@
         }
       }
     },
-    "/api/PatchFavoritos": {
+    "/PatchFavoritos": {
       "patch": {
         "tags": [
           "Favoritos"
@@ -406,7 +400,7 @@
         }
       }
     },
-    "/api/codigo": {
+    "/codigo": {
       "get": {
         "tags": [
           "Verificação"
@@ -436,7 +430,7 @@
         }
       }
     },
-    "/api/GetCodigoPorEmail/": {
+    "/GetCodigoPorEmail/": {
       "get": {
         "tags": [
           "Verificação"
@@ -467,7 +461,7 @@
         }
       }
     },
-    "/api/codigo/{id}": {
+    "/codigo/{id}": {
       "get": {
         "tags": [
           "Verificação"
@@ -559,7 +553,7 @@
         }
       }
     },
-    "/api/usuarios": {
+    "/usuarios": {
       "get": {
         "tags": [
           "Usuários"
@@ -621,7 +615,7 @@
         }
       }
     },
-    "/api/usuarios/pesquisa/nome": {
+    "/usuarios/pesquisa/nome": {
       "get": {
         "tags": [
           "Usuários"
@@ -652,7 +646,7 @@
         }
       }
     },
-    "/api/usuarios/pesquisa/email": {
+    "/usuarios/pesquisa/email": {
       "get": {
         "tags": [
           "Usuários"
@@ -683,7 +677,7 @@
         }
       }
     },
-    "/api/usuarios/{idUsuario}": {
+    "/usuarios/{idUsuario}": {
       "get": {
         "tags": [
           "Usuários"
@@ -715,7 +709,7 @@
         }
       }
     },
-    "/api/usuarios/{id}": {
+    "/usuarios/{id}": {
       "put": {
         "tags": [
           "Usuários"
@@ -850,7 +844,7 @@
         }
       }
     },
-    "/api/GetLogins": {
+    "/GetLogins": {
       "get": {
         "tags": [
           "Login"
@@ -869,7 +863,7 @@
         }
       }
     },
-    "/api/logins/{idLogin}": {
+    "/logins/{idLogin}": {
       "get": {
         "tags": [
           "Login"
@@ -901,7 +895,7 @@
         }
       }
     },
-    "/api/ConfirmarLogin": {
+    "/ConfirmarLogin": {
       "get": {
         "tags": [
           "Login"
@@ -933,7 +927,7 @@
         }
       }
     },
-    "/api/PublicarReceita": {
+    "/PublicarReceita": {
       "post": {
         "tags": [
           "Publicação"
@@ -978,7 +972,7 @@
         }
       }
     },
-    "/api/PublicarEtapa": {
+    "/PublicarEtapa": {
       "post": {
         "tags": [
           "Publicação"
@@ -1014,7 +1008,7 @@
         }
       }
     },
-    "/api/PublicarIngrediente": {
+    "/PublicarIngrediente": {
       "post": {
         "tags": [
           "Publicação"

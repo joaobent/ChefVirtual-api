@@ -17,7 +17,7 @@ import http from 'http'
 const app = express();
 const PORT = 3000;
 
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
     explorer: true,
     swaggerOptions: {
         docExpansion: 'none',
@@ -26,14 +26,14 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
 }));
 
 app.use(express.json());
-app.use('/api', receitasRotas); // prefixa as rotas das receitas com /api
-app.use('/api', categoriaRotas);
-app.use('/api', comentariosRotas);
-app.use('/api', favoritoRotas);
-app.use('/api', codigoVerificacao);
-app.use('/api', usuarioRouter)
-app.use('/api', loginRouter)
-app.use('/api', pubReceita); 
+app.use('/', receitasRotas); // prefixa as rotas das receitas com /api
+app.use('/', categoriaRotas);
+app.use('/', comentariosRotas);
+app.use('/', favoritoRotas);
+app.use('/', codigoVerificacao);
+app.use('/', usuarioRouter)
+app.use('/', loginRouter)
+app.use('/', pubReceita); 
 
 
 const server = http.createServer(app);
