@@ -1,47 +1,32 @@
 import express from 'express';
 import {
-    GetAllCategorias,
-    GetCategoriaById,
-    PostCategoria,
-    PutCategoria,
-    DeleteCategoria
-} from '../Consultas/categoria.js';
+  getCategorias,
+  getCategoriaById,
+  postCategoria,
+  putCategoria,
+  deleteCategoria
+} from '../controllers/categoriaController.js'; // Altere se o caminho estiver diferente
 
 const router = express.Router();
 
-// Rota para obter todas as categorias
-router.get('/Categorias', 
-    GetAllCategorias
-    // #swagger.tags = ['Categorias']
-    // #swagger.description = 'Retorna todas as categorias do banco'
-);
+router.get('/', getCategorias);
+// #swagger.tags = ['Categorias']
+// #swagger.description = 'Retorna todas as categorias do banco'
 
-// Rota para obter uma categoria pelo ID
-router.get('/Categorias:id', 
-    GetCategoriaById
-    // #swagger.tags = ['Categorias']
-    // #swagger.description = 'Retorna uma categoria específica pelo ID'
-);
+router.get('/:id', getCategoriaById);
+// #swagger.tags = ['Categorias']
+// #swagger.description = 'Retorna uma categoria específica pelo ID'
 
-// Rota para criar uma nova categoria
-router.post('/Categorias', 
-    PostCategoria
-    // #swagger.tags = ['Categorias']
-    // #swagger.description = 'Cria uma nova categoria no banco'
-);
+router.post('/', postCategoria);
+// #swagger.tags = ['Categorias']
+// #swagger.description = 'Cria uma nova categoria no banco'
 
-// Rota para atualizar uma categoria existente
-router.put('/Categorias:id', 
-    PutCategoria
-    // #swagger.tags = ['Categorias']
-    // #swagger.description = 'Atualiza uma categoria existente pelo ID'
-);
+router.put('/:id', putCategoria);
+// #swagger.tags = ['Categorias']
+// #swagger.description = 'Atualiza uma categoria existente pelo ID'
 
-// Rota para deletar uma categoria
-router.delete('/Categorias:id', 
-    DeleteCategoria
-    // #swagger.tags = ['Categorias']
-    // #swagger.description = 'Deleta uma categoria pelo ID'
-);
+router.delete('/:id', deleteCategoria);
+// #swagger.tags = ['Categorias']
+// #swagger.description = 'Deleta uma categoria pelo ID'
 
 export default router;
