@@ -38,6 +38,10 @@
     {
       "name": "Publicação",
       "description": "Operações relacionadas à publicação de receitas"
+    },
+    {
+      "name": "Categorias",
+      "description": "Operações relacionadas às categorias"
     }
   ],
   "paths": {
@@ -1119,7 +1123,125 @@
             "example": "senha123"
           }
         }
+        },
+        "/api/categorias/": {
+        "get": {
+          "tags": ["Categorias"],
+          "summary": "Retorna todas as categorias",
+          "responses": {
+            "200": {
+              "description": "Lista de categorias",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer" },
+                        "nome": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": { "description": "Nenhuma categoria encontrada" },
+            "500": { "description": "Erro interno" }
+          }
+        },
+        "post": {
+          "tags": ["Categorias"],
+          "summary": "Cria uma nova categoria",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "nome": { "type": "string" }
+                  },
+                  "required": ["nome"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": { "description": "Categoria criada" },
+            "400": { "description": "Nome obrigatório" },
+            "500": { "description": "Erro ao criar categoria" }
+          }
+        }
+      },
+      "/api/categorias/{id}": {
+        "get": {
+          "tags": ["Categorias"],
+          "summary": "Retorna uma categoria pelo ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": { "type": "integer" }
+            }
+          ],
+          "responses": {
+            "200": { "description": "Categoria encontrada" },
+            "404": { "description": "Categoria não encontrada" },
+            "500": { "description": "Erro interno" }
+          }
+        },
+        "put": {
+          "tags": ["Categorias"],
+          "summary": "Atualiza uma categoria pelo ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": { "type": "integer" }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "nome": { "type": "string" }
+                  },
+                  "required": ["nome"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": { "description": "Categoria atualizada" },
+            "404": { "description": "Categoria não encontrada" },
+            "400": { "description": "Nome obrigatório" },
+            "500": { "description": "Erro ao atualizar categoria" }
+          }
+        },
+        "delete": {
+          "tags": ["Categorias"],
+          "summary": "Deleta uma categoria pelo ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": { "type": "integer" }
+            }
+          ],
+          "responses": {
+            "200": { "description": "Categoria deletada" },
+            "404": { "description": "Categoria não encontrada" },
+            "500": { "description": "Erro ao deletar categoria" }
+            }
+          }
+        }
       }
     }
   }
-}
