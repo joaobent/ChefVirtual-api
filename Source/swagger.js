@@ -20,7 +20,8 @@ const doc = {
     { name: 'Usuários', description: 'Operações relacionadas aos usuários' },
     { name: 'Login', description: 'Operações relacionadas ao login' },
     { name: 'Verificação', description: 'Operações relacionadas ao código de verificação.\nController relacionado com o fluxo de login' },
-    { name: 'Publicação', description: 'Operações relacionadas à publicação de receitas' }
+    { name: 'Publicação', description: 'Operações relacionadas à publicação de receitas' },
+    { name: 'Categorias', description: 'Operações relacionadas às categorias' }
   ],
   definitions: {
     ReceitaPatch: {
@@ -41,8 +42,18 @@ const doc = {
       nome: "Fulano da Silva",
       email: "fulano@email.com",
       senha: "senha123"
+    },
+    CategoriaInput: {
+      type: "object",
+      properties: {
+        nome: {
+          type: "string",
+          example: "Sobremesas"
+        }
+      }
     }
   }
+  
 };
 
 swaggerAutogen({ openapi: '3.0.0' })(outputFile, endpointsFiles, doc);
