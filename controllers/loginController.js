@@ -40,14 +40,14 @@ export async function getLoginById(req, res) {
 }
 
 export async function confirmarLogin(req, res) {
-  const { email, codigoVerificacao } = req.query;
-  if (typeof email === 'string' && email.includes('@') && email.includes('.') && !codigoVerificacao) {
+  const { email, senha } = req.query;
+  if (typeof email === 'string' && email.includes('@') && email.includes('.') && !senha) {
     return res.status(400).json({ erro: 'Parâmetros estão faltantes' });
   }
 
   try 
   {
-    const { token } = await ConfirmarLogin(email, codigoVerificacao);
+    const { token } = await ConfirmarLogin(email, senha);
     res.status(200).json({ mensagem: 'Login confirmado com sucesso', token: token });
   } 
   catch (error)

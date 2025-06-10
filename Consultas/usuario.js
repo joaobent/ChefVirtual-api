@@ -57,6 +57,7 @@ async function GetUsuarioByEmail(email) {
         const res = resposta.map(usuario => ({
             id: usuario.id,
             nome: usuario.nome,
+            senha: usuario.senha,
             email: usuario.email,
             facebook: usuario.facebook,
             instagram: usuario.instagram,

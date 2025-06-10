@@ -63,20 +63,19 @@ async function PostLogin(email, senha, userId) {
     }
 }
 
-async function ConfirmarLogin(email, codigoVerificacao) {
+async function ConfirmarLogin(email, senha) {
     const conexao = await pool.getConnection();
     const SECRET = "chavesecreta"
     try {   
 
-        const codigoVerificacaoExistente = await GetCodigoVerificacaoByEmail(email)
-        
-        if (!codigoVerificacaoExistente.codigo_verificacao) {
-            throw new Error('Código de verificação não encontrado para este login.');
+        const usuarioCadastrdado = await GetUsuarioByEmail(email)
+        if (!usuarioCadastrdado[0].senha) {
+            throw new Error('Usuário não encontrado.');
         }
-        if(codigoVerificacaoExistente.codigo_verificacao !== codigoVerificacao)
+        if(usuarioCadastrdado[0].senha !== senha)
         {
-            console.log(codigoVerificacaoExistente.codigo_verificacao,codigoVerificacao)
-            throw Error('Código de verificação não condiz com o código gerado.')
+            console.log(usuarioCadastrdado[0].senha, senha)
+            throw Error('Senha não condiz.')
         }
 
         const [usuarios] = await conexao.query(
