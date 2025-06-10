@@ -79,7 +79,7 @@ async function ConfirmarLogin(email, senha) {
         }
 
         const [usuarios] = await conexao.query(
-            'SELECT id, email FROM login WHERE email = ?',
+            'SELECT * FROM login WHERE email = ?',
             [email]
         );
 
@@ -90,11 +90,11 @@ async function ConfirmarLogin(email, senha) {
 
         const token = jwt.sign
         (
-            { id: usuario.id, email: usuario.email },
+            { id: usuario.id, email: usuario.email, id_usuario: usuario.id_usuario  },
             SECRET
         );
 
-    return { token };
+    return { token, id: usuario.id_usuario };
 
     } catch (error) {
         console.log(error);

@@ -47,8 +47,8 @@ export async function confirmarLogin(req, res) {
 
   try 
   {
-    const { token } = await ConfirmarLogin(email, senha);
-    res.status(200).json({ mensagem: 'Login confirmado com sucesso', token: token });
+    const { token, id } = await ConfirmarLogin(email, senha);
+    res.status(200).json({ mensagem: 'Login confirmado com sucesso', token: token, idUsuario: id });
   } 
   catch (error)
   {
