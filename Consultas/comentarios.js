@@ -4,23 +4,31 @@ import { executaQuery } from '../config/dbInstance.js'
 export async function GetAllComentarios(idReceita) {
     const conexao = await pool.getConnection()
     try {
-        const query = `SELECT * FROM comentarios WHERE receita_id = ?`
+        const query = `
+            SELECT c.usuario_id, c.comentario, u.nome AS nome_usuario
+            FROM comentarios c
+            JOIN usuario u ON c.usuario_id = u.id
+            WHERE c.receita_id = ?
+        `
         const resposta = await executaQuery(conexao, query, [idReceita])
 
         const res = resposta.map(comentario => ({
             receitaId: idReceita,
             usuarioId: comentario.usuario_id,
+            nomeUsuario: comentario.nome_usuario,
             comentario: comentario.comentario
         }))
 
-        return res;
+        return res
 
     } catch (error) {
-        throw new Error("Erro ao realizar operação.")
+        console.log(error)
+        throw new Error("Erro ao buscar os comentários.")
     } finally {
         conexao.release()
     }
 }
+
 
 export async function PostComentario(receitaId, usuarioId, comentario) {
     const conexao = await pool.getConnection()
