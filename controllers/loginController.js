@@ -45,13 +45,26 @@ export async function confirmarLogin(req, res) {
     return res.status(400).json({ erro: 'Parâmetros estão faltantes' });
   }
 
-  try 
-  {
+  try {
     const { token, id } = await ConfirmarLogin(email, senha);
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: true,        // true se estiver usando HTTPS
+      sameSite: 'Strict',
+      maxAge: 3600000      // 1 hora
+    });
+
+    res.cookie('id', id, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'Strict',
+      maxAge: 3600000
+    });
+
     res.status(200).json({ mensagem: 'Login confirmado com sucesso', token: token, idUsuario: id });
-  } 
-  catch (error)
-  {
+  }
+  catch (error) {
     res.status(400).json({ erro: error.message });
   }
 }
