@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import swaggerUi from 'swagger-ui-express'
 import swaggerDocument from './swaggerOpt.json' with { type: 'json' };
 
@@ -24,7 +25,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
         defaultModelsExpandDepth: -1,
     }
 }));
-
+app.use(cors());
 app.use(express.json());
 app.use('/api/Receitas', receitasRotas); // prefixa as rotas das receitas com /api
 app.use('/api/Categorias', categoriaRotas);
