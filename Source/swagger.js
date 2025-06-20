@@ -3,6 +3,8 @@ import swaggerAutogen from 'swagger-autogen';
 const outputFile = './swaggerOpt.json';
 const endpointsFiles = [
   './app.js', // Arquivo principal com uso das rotas
+  './Rotas/etapas.js',
+  './Rotas/ingredientes.js',
 ];
 
 const doc = {
@@ -22,6 +24,8 @@ const doc = {
     { name: 'Verificação', description: 'Operações relacionadas ao código de verificação.\nController relacionado com o fluxo de login' },
     { name: 'Publicação', description: 'Operações relacionadas à publicação de receitas' },
     { name: 'Categorias', description: 'Operações relacionadas às categorias' }
+    { name: 'Etapas', description: 'Operações relacionadas às etapas das receitas' },
+    { name: 'Ingredientes', description: 'Operações relacionadas aos ingredientes das receitas' }
   ],
   definitions: {
     ReceitaPatch: {
