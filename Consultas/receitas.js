@@ -128,11 +128,16 @@ async function GetReceitasByTitle(name) {
     try {
         const query =
             `   SELECT 
-                    r.titulo, r.imagem, 
-                    u.id AS usuarioId, u.nome
+                r.titulo, r.imagem, r.tempo_preparo, r.id, 
+                u.id AS usuarioId, u.nome,
+                ROUND(AVG(f.avaliacao), 1) AS mediaAvaliacao
                 FROM receita AS r
                 INNER JOIN usuario AS u ON r.usuario_id = u.id
+                LEFT JOIN favoritos AS f ON r.id = f.receita_id
                 WHERE r.titulo LIKE ?
+                GROUP BY 
+                    r.titulo, r.imagem, r.tempo_preparo, r.id, 
+                    u.id, u.nome
                 ORDER BY r.id DESC
             `;
 
@@ -147,7 +152,8 @@ async function GetReceitasByTitle(name) {
                 id: row.usuarioId,
                 nome: row.nome,
             },
-            imagemReceita: row.imagem ? row.imagem.toString('base64') : null,
+            mediaAvaliacao: row.mediaAvaliacao || 0,
+            imagemReceita: row.imagem.toString()
         }));
 
         return receitas;
