@@ -23,7 +23,7 @@ const doc = {
     { name: 'Login', description: 'Operações relacionadas ao login' },
     { name: 'Verificação', description: 'Operações relacionadas ao código de verificação.\nController relacionado com o fluxo de login' },
     { name: 'Publicação', description: 'Operações relacionadas à publicação de receitas' },
-    { name: 'Categorias', description: 'Operações relacionadas às categorias' }
+    { name: 'Categorias', description: 'Operações relacionadas às categorias' },
     { name: 'Etapas', description: 'Operações relacionadas às etapas das receitas' },
     { name: 'Ingredientes', description: 'Operações relacionadas aos ingredientes das receitas' }
   ],
