@@ -6,11 +6,13 @@ dotenv.config()
 
 const pool = mysql.createPool(
     {
-        host: process.env.HOST,
-        port : process.env.PORT,
-        user: process.env.USER,
-        password: process.env.PASSWORD,
-        database: process.env.DATABASE
+        host: '200.129.130.149', 
+        user: 'chefvirtual',
+        port: 20002,
+        password: '12345678',
+        database: 'chefvirtual_db',
+        waitForConnections: true
+        
     }
 )
 
