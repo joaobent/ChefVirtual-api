@@ -42,6 +42,14 @@
     {
       "name": "Categorias",
       "description": "Operações relacionadas às categorias"
+    },
+    {
+      "name": "Etapas",
+      "description": "Operações relacionadas às etapas das receitas"
+    },
+    {
+      "name": "Ingredientes",
+      "description": "Operações relacionadas aos ingredientes das receitas"
     }
   ],
   "paths": {
@@ -218,86 +226,86 @@
         },
         "requestBody": {
           "required": true,
-      "content": {
-  "application/json": {
-    "schema": {
-      "type": "object",
-      "properties": {
-        "idReceita": {
-          "type": "integer",
-          "example": 3
-        },
-        "titulo": {
-          "type": "string",
-          "example": "Bolo de cenoura"
-        },
-        "descricao": {
-          "type": "string",
-          "example": "Delicioso bolo com cobertura de chocolate"
-        },
-        "ingredientes": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "idIngredienteDb": {
-                "type": "integer",
-                "example": 1
-              },
-              "quantidade": {
-                "type": "string",
-                "example": "2 xícaras"
-              },
-              "medida": {
-                "type": "integer",
-                "example": 1
-              },
-              "unidade": {
-                "type": "string",
-                "example": "gramas"
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "idReceita": {
+                    "type": "integer",
+                    "example": 3
+                  },
+                  "titulo": {
+                    "type": "string",
+                    "example": "Bolo de cenoura"
+                  },
+                  "descricao": {
+                    "type": "string",
+                    "example": "Delicioso bolo com cobertura de chocolate"
+                  },
+                  "ingredientes": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "idIngredienteDb": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "quantidade": {
+                          "type": "string",
+                          "example": "2 xícaras"
+                        },
+                        "medida": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "unidade": {
+                          "type": "string",
+                          "example": "gramas"
+                        }
+                      }
+                    }
+                  },
+                  "etapas": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "numeroEtapa": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "descricao": {
+                          "type": "string",
+                          "example": "Misture os ingredientes."
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "idReceita": 3,
+                  "titulo": "Bolo de macarrão",
+                  "descricao": "Delicioso bolo com cobertura de macarrão",
+                  "ingredientes": [
+                    {
+                      "idIngredienteDb": 1,
+                      "quantidade": "2 xícaras",
+                      "medida": 1,
+                      "unidade": "gramas"
+                    }
+                  ],
+                  "etapas": [
+                    {
+                      "numeroEtapa": 1,
+                      "descricao": "Misture os ingredientes."
+                    }
+                  ]
+                }
               }
             }
           }
-        },
-        "etapas": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "numeroEtapa": {
-                "type": "integer",
-                "example": 1
-              },
-              "descricao": {
-                "type": "string",
-                "example": "Misture os ingredientes."
-              }
-            }
-          }
-        }
-      },
-      "example": {
-        "idReceita": 3,
-        "titulo": "Bolo de macarrão",
-        "descricao": "Delicioso bolo com cobertura de macarrão",
-        "ingredientes": [
-          {
-            "idIngredienteDb": 1,
-            "quantidade": "2 xícaras",
-            "medida": 1,
-            "unidade": "gramas"
-          }
-        ],
-        "etapas": [
-          {
-            "numeroEtapa": 1,
-            "descricao": "Misture os ingredientes."
-          }
-        ]
-      }
-    }
-  }
-}
         }
       }
     },
@@ -643,7 +651,7 @@
         }
       }
     },
-    "/api/Usuarios/": {
+    "/api/Usuários/": {
       "get": {
         "tags": [
           "Usuários"
@@ -957,41 +965,50 @@
           }
         },
         "requestBody": {
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "idReceita": {
-                  "type": "integer",
-                  "example": 1
-                },
-                "etapas": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "numeroEtapa": {
-                        "type": "integer",
-                        "example": 1
-                      },
-                      "descricao": {
-                        "type": "string",
-                        "example": "Misture os ingredientes secos."
-                      }
-                    }
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "idReceita": {
+                    "type": "integer",
+                    "example": 1
                   },
-                  "example": [
-                    { "numeroEtapa": 1, "descricao": "Misture os ingredientes secos." },
-                    { "numeroEtapa": 2, "descricao": "Adicione os ovos e mexa bem." },
-                    { "numeroEtapa": 3, "descricao": "Leve ao forno por 30 minutos." }
-                  ]
+                  "etapas": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "numeroEtapa": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "descricao": {
+                          "type": "string",
+                          "example": "Misture os ingredientes secos."
+                        }
+                      }
+                    },
+                    "example": [
+                      {
+                        "numeroEtapa": 1,
+                        "descricao": "Misture os ingredientes secos."
+                      },
+                      {
+                        "numeroEtapa": 2,
+                        "descricao": "Adicione os ovos e mexa bem."
+                      },
+                      {
+                        "numeroEtapa": 3,
+                        "descricao": "Leve ao forno por 30 minutos."
+                      }
+                    ]
+                  }
                 }
               }
             }
           }
         }
-      }
       }
     },
     "/api/Publicacao/PublicarIngrediente": {
@@ -1045,14 +1062,325 @@
                       }
                     },
                     "example": [
-                      { "idIngredienteDb": 1, "quantidade": "1 xícara", "medida": 1, "unidade": "gramas" },
-                      { "idIngredienteDb": 2, "quantidade": "2 unidades", "medida": 2, "unidade": "gramas" },
-                      { "idIngredienteDb": 3, "quantidade": "3 copos", "medida": 3, "unidade": "gramas" }
+                      {
+                        "idIngredienteDb": 1,
+                        "quantidade": "1 xícara",
+                        "medida": 1,
+                        "unidade": "gramas"
+                      },
+                      {
+                        "idIngredienteDb": 2,
+                        "quantidade": "2 unidades",
+                        "medida": 2,
+                        "unidade": "gramas"
+                      },
+                      {
+                        "idIngredienteDb": 3,
+                        "quantidade": "3 copos",
+                        "medida": 3,
+                        "unidade": "gramas"
+                      }
                     ]
                   }
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/etapas/{idReceita}": {
+      "post": {
+        "tags": [
+          "Etapas"
+        ],
+        "summary": "Adicionar etapas a uma receita",
+        "description": "Adiciona uma ou mais etapas a uma receita específica",
+        "parameters": [
+          {
+            "name": "idReceita",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID da receita à qual as etapas serão adicionadas"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "numeroEtapa": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "descricao": {
+                      "type": "string",
+                      "example": "Misture todos os ingredientes."
+                    }
+                  },
+                  "required": [
+                    "numeroEtapa",
+                    "descricao"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Etapas adicionadas com sucesso"
+          },
+          "500": {
+            "description": "Erro ao adicionar etapas"
+          }
+        }
+      }
+    },
+    "/api/ingredientes/{idReceita}": {
+      "post": {
+        "tags": [
+          "Ingredientes"
+        ],
+        "summary": "Adicionar ingredientes a uma receita",
+        "description": "Insere ingredientes para uma receita específica",
+        "parameters": [
+          {
+            "name": "idReceita",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID da receita à qual os ingredientes serão adicionados"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "idIngredienteDb": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "quantidade": {
+                      "type": "number",
+                      "example": 1.5
+                    },
+                    "medida": {
+                      "type": "string",
+                      "example": "xícara"
+                    },
+                    "unidade": {
+                      "type": "string",
+                      "example": "un"
+                    }
+                  },
+                  "required": [
+                    "idIngredienteDb",
+                    "quantidade",
+                    "medida",
+                    "unidade"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ingredientes adicionados com sucesso"
+          },
+          "500": {
+            "description": "Erro ao adicionar ingredientes"
+          }
+        }
+      }
+    },
+    "/api/categorias/": {
+      "get": {
+        "tags": [
+          "Categorias"
+        ],
+        "summary": "Retorna todas as categorias",
+        "responses": {
+          "200": {
+            "description": "Lista de categorias",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "nome": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Nenhuma categoria encontrada"
+          },
+          "500": {
+            "description": "Erro interno"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Categorias"
+        ],
+        "summary": "Cria uma nova categoria",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "nome"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Categoria criada"
+          },
+          "400": {
+            "description": "Nome obrigatório"
+          },
+          "500": {
+            "description": "Erro ao criar categoria"
+          }
+        }
+      }
+    },
+    "/api/categorias/{id}": {
+      "get": {
+        "tags": [
+          "Categorias"
+        ],
+        "summary": "Retorna uma categoria pelo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Categoria encontrada"
+          },
+          "404": {
+            "description": "Categoria não encontrada"
+          },
+          "500": {
+            "description": "Erro interno"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Categorias"
+        ],
+        "summary": "Atualiza uma categoria pelo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "nome"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Categoria atualizada"
+          },
+          "404": {
+            "description": "Categoria não encontrada"
+          },
+          "400": {
+            "description": "Nome obrigatório"
+          },
+          "500": {
+            "description": "Erro ao atualizar categoria"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Categorias"
+        ],
+        "summary": "Deleta uma categoria pelo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Categoria deletada"
+          },
+          "404": {
+            "description": "Categoria não encontrada"
+          },
+          "500": {
+            "description": "Erro ao deletar categoria"
           }
         }
       }
@@ -1123,125 +1451,7 @@
             "example": "senha123"
           }
         }
-        },
-        "/api/categorias/": {
-        "get": {
-          "tags": ["Categorias"],
-          "summary": "Retorna todas as categorias",
-          "responses": {
-            "200": {
-              "description": "Lista de categorias",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "id": { "type": "integer" },
-                        "nome": { "type": "string" }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "404": { "description": "Nenhuma categoria encontrada" },
-            "500": { "description": "Erro interno" }
-          }
-        },
-        "post": {
-          "tags": ["Categorias"],
-          "summary": "Cria uma nova categoria",
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "nome": { "type": "string" }
-                  },
-                  "required": ["nome"]
-                }
-              }
-            }
-          },
-          "responses": {
-            "201": { "description": "Categoria criada" },
-            "400": { "description": "Nome obrigatório" },
-            "500": { "description": "Erro ao criar categoria" }
-          }
-        }
-      },
-      "/api/categorias/{id}": {
-        "get": {
-          "tags": ["Categorias"],
-          "summary": "Retorna uma categoria pelo ID",
-          "parameters": [
-            {
-              "name": "id",
-              "in": "path",
-              "required": true,
-              "schema": { "type": "integer" }
-            }
-          ],
-          "responses": {
-            "200": { "description": "Categoria encontrada" },
-            "404": { "description": "Categoria não encontrada" },
-            "500": { "description": "Erro interno" }
-          }
-        },
-        "put": {
-          "tags": ["Categorias"],
-          "summary": "Atualiza uma categoria pelo ID",
-          "parameters": [
-            {
-              "name": "id",
-              "in": "path",
-              "required": true,
-              "schema": { "type": "integer" }
-            }
-          ],
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "nome": { "type": "string" }
-                  },
-                  "required": ["nome"]
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": { "description": "Categoria atualizada" },
-            "404": { "description": "Categoria não encontrada" },
-            "400": { "description": "Nome obrigatório" },
-            "500": { "description": "Erro ao atualizar categoria" }
-          }
-        },
-        "delete": {
-          "tags": ["Categorias"],
-          "summary": "Deleta uma categoria pelo ID",
-          "parameters": [
-            {
-              "name": "id",
-              "in": "path",
-              "required": true,
-              "schema": { "type": "integer" }
-            }
-          ],
-          "responses": {
-            "200": { "description": "Categoria deletada" },
-            "404": { "description": "Categoria não encontrada" },
-            "500": { "description": "Erro ao deletar categoria" }
-            }
-          }
-        }
       }
     }
   }
+}

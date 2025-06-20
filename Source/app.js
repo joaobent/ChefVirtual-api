@@ -12,6 +12,8 @@ import loginRouter from '../Rotas/loginRotas.js'
 import codigoVerificacao from '../Rotas/codigoVerificacao.js';
 import usuarioRouter from '../Rotas/usuarioRotas.js'
 import pubReceita from '../Rotas/pubReceita.js'
+import etapasRouter from '../Rotas/etapas.js';
+import ingredientesRouter from '../Rotas/ingredientes.js';
 import pool from '../config/conexao.js'
 import http from 'http'
 
@@ -53,6 +55,8 @@ app.use('/api/Verificacao', codigoVerificacao);
 app.use('/api/Usuarios', usuarioRouter)
 app.use('/api/Login', loginRouter)
 app.use('/api/Publicacao', pubReceita);
+app.use('/api/etapas', etapasRouter);
+app.use('/api/ingredientes', ingredientesRouter);
 
 
 const server = http.createServer(app);
