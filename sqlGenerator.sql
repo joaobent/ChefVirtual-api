@@ -1,149 +1,256 @@
-CREATE DATABASE fslab;
-use fslab;
+-- MySQL Workbench Forward Engineering
 
-CREATE TABLE Usuario (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(255),
-    idade INT,
-    email VARCHAR(255),
-    idNivel INT,
-    facebook CHAR(255),
-    instagram CHAR(255),
-    youtube CHAR(255)
-);
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
-CREATE TABLE Nivel (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    idUsuario INT,
-    NivelAcesso INT
-);
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema chefvirtual_db
+-- -----------------------------------------------------
 
-CREATE TABLE Login (
-    idUsuario INT PRIMARY KEY,
-    senha CHAR(255),
-    FOREIGN KEY (idUsuario) REFERENCES Usuario(id)
-);
+-- -----------------------------------------------------
+-- Schema chefvirtual_db
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `chefvirtual_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+USE `chefvirtual_db` ;
 
-CREATE TABLE Receita (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    idUsuario INT,
-    nome VARCHAR(255),
-    descricao TEXT,
-    favoritos INT,
-    FOREIGN KEY (idUsuario) REFERENCES Usuario(id)
-);
-
-CREATE TABLE Categoria (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    idReceita INT,
-    tipo CHAR(255),
-    FOREIGN KEY (idReceita) REFERENCES Receita(id)
-);
-
-CREATE TABLE Favorito (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    idUsuario INT,
-    idReceita INT,
-    FOREIGN KEY (idUsuario) REFERENCES Usuario(id),
-    FOREIGN KEY (idReceita) REFERENCES Receita(id)
-);
-
-CREATE TABLE Comentarios (
-    idReceita INT,
-    idUsuario INT,
-    comentario TEXT,
-    PRIMARY KEY (idReceita, idUsuario),
-    FOREIGN KEY (idReceita) REFERENCES Receita(id),
-    FOREIGN KEY (idUsuario) REFERENCES Usuario(id)
-);
-
-CREATE TABLE PalavrasRestritas (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(255)
-);
-
-CREATE TABLE imagensReceitas (
-	id int primary key AUTO_INCREMENT,
-    idReceita INT,
-    imagem LONGTEXT,
-    FOREIGN KEY (idReceita) REFERENCES Receita(id)
-);
-
-CREATE TABLE imagensUsuarios(
-	id int primary key AUTO_INCREMENT,
-    idUsuario INT,
-    imagem LONGTEXT,
-    FOREIGN KEY (idUsuario) REFERENCES Usuario(id)
-);
+-- -----------------------------------------------------
+-- Table `chefvirtual_db`.`categoria`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `chefvirtual_db`.`categoria` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `tipo` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 4
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
 
-ALTER TABLE Nivel
-ADD CONSTRAINT fk_nivel_usuario FOREIGN KEY (idUsuario) REFERENCES Usuario(id);
+-- -----------------------------------------------------
+-- Table `chefvirtual_db`.`usuario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `chefvirtual_db`.`usuario` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  `imagem` LONGBLOB NULL DEFAULT NULL,
+  `facebook` VARCHAR(100) NULL DEFAULT NULL,
+  `instagram` VARCHAR(100) NULL DEFAULT NULL,
+  `youtube` VARCHAR(100) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `email` (`email` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 34
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
-ALTER TABLE Usuario
-ADD CONSTRAINT fk_usuario_nivel FOREIGN KEY (idNivel) REFERENCES Nivel(id);
 
--- Inserir níveis de acesso
-INSERT INTO Nivel (idUsuario, NivelAcesso) VALUES 
-(NULL, 1), -- Administrador
-(NULL, 2), -- Usuário comum
-(NULL, 3); -- Moderador
+-- -----------------------------------------------------
+-- Table `chefvirtual_db`.`receita`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `chefvirtual_db`.`receita` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `titulo` VARCHAR(100) NOT NULL,
+  `descricao` TEXT NOT NULL,
+  `imagem` LONGBLOB NOT NULL,
+  `usuario_id` INT NULL DEFAULT NULL,
+  `tempo_preparo` INT NULL DEFAULT NULL,
+  `qtn_pessoas` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_usuario_receita` (`usuario_id` ASC) VISIBLE,
+  CONSTRAINT `fk_usuario_receita`
+    FOREIGN KEY (`usuario_id`)
+    REFERENCES `chefvirtual_db`.`usuario` (`id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 48
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
--- Inserir usuários
-INSERT INTO Usuario (nome, idade, email, idNivel, facebook, instagram, youtube) VALUES 
-('Alice Souza', 25, 'alice@email.com', 1, 'alice.fb', 'alice.ig', 'alice.yt'),
-('Bruno Lima', 30, 'bruno@email.com', 2, 'bruno.fb', 'bruno.ig', 'bruno.yt'),
-('Carla Dias', 22, 'carla@email.com', 3, 'carla.fb', 'carla.ig', 'carla.yt');
 
--- Atualizar idUsuario na tabela Nivel
-UPDATE Nivel SET idUsuario = 1 WHERE id = 1;
-UPDATE Nivel SET idUsuario = 2 WHERE id = 2;
-UPDATE Nivel SET idUsuario = 3 WHERE id = 3;
+-- -----------------------------------------------------
+-- Table `chefvirtual_db`.`categoria_receita`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `chefvirtual_db`.`categoria_receita` (
+  `categoria_id` INT NOT NULL,
+  `receita_id` INT NOT NULL,
+  PRIMARY KEY (`categoria_id`, `receita_id`),
+  INDEX `fk_categoria_has_receita_receita1_idx` (`receita_id` ASC) VISIBLE,
+  INDEX `fk_categoria_has_receita_categoria1_idx` (`categoria_id` ASC) VISIBLE,
+  CONSTRAINT `fk_categoria_has_receita_categoria1`
+    FOREIGN KEY (`categoria_id`)
+    REFERENCES `chefvirtual_db`.`categoria` (`id`),
+  CONSTRAINT `fk_categoria_has_receita_receita1`
+    FOREIGN KEY (`receita_id`)
+    REFERENCES `chefvirtual_db`.`receita` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
--- Criar login
-INSERT INTO Login (idUsuario, senha) VALUES 
-(1, 'senhaAlice'),
-(2, 'senhaBruno'),
-(3, 'senhaCarla');
 
--- Inserir receitas
-INSERT INTO Receita (idUsuario, nome, descricao, favoritos) VALUES 
-(1, 'Bolo de Cenoura', 'Receita de bolo com cobertura de chocolate', 5),
-(2, 'Lasanha de Frango', 'Lasanha com molho branco e frango desfiado', 3),
-(3, 'Salada Tropical', 'Salada com frutas e folhas verdes', 2);
+-- -----------------------------------------------------
+-- Table `chefvirtual_db`.`codigo_verificacao`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `chefvirtual_db`.`codigo_verificacao` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `codigo_verificacao` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 40
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
--- Inserir categorias
-INSERT INTO Categoria (idReceita, tipo) VALUES 
-(1, 'Doce'),
-(2, 'Salgado'),
-(3, 'Saudável');
 
--- Inserir favoritos
-INSERT INTO Favorito (idUsuario, idReceita) VALUES 
-(2, 1), 
-(3, 1),
-(1, 2);
+-- -----------------------------------------------------
+-- Table `chefvirtual_db`.`comentarios`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `chefvirtual_db`.`comentarios` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `usuario_id` INT NOT NULL,
+  `receita_id` INT NOT NULL,
+  `comentario` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_usuario_has_receita_receita1_idx` (`receita_id` ASC) VISIBLE,
+  INDEX `fk_usuario_has_receita_usuario1_idx` (`usuario_id` ASC) VISIBLE,
+  CONSTRAINT `fk_usuario_has_receita_receita1`
+    FOREIGN KEY (`receita_id`)
+    REFERENCES `chefvirtual_db`.`receita` (`id`),
+  CONSTRAINT `fk_usuario_has_receita_usuario1`
+    FOREIGN KEY (`usuario_id`)
+    REFERENCES `chefvirtual_db`.`usuario` (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 23
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
--- Inserir comentários
-INSERT INTO Comentarios (idReceita, idUsuario, comentario) VALUES 
-(1, 2, 'Muito bom esse bolo!'),
-(2, 1, 'Gostei da lasanha, bem cremosa.'),
-(3, 1, 'Leve e saborosa!');
 
--- Inserir palavras restritas
-INSERT INTO PalavrasRestritas (nome) VALUES 
-('fudido'),
-('merda'),
-('porra');
+-- -----------------------------------------------------
+-- Table `chefvirtual_db`.`etapa`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `chefvirtual_db`.`etapa` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `numeroEtapa` INT NOT NULL,
+  `descricao` TEXT NOT NULL,
+  `receita_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `receita_id`),
+  INDEX `fk_etapa_receita1_idx` (`receita_id` ASC) VISIBLE,
+  CONSTRAINT `fk_etapa_receita1`
+    FOREIGN KEY (`receita_id`)
+    REFERENCES `chefvirtual_db`.`receita` (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 28
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
--- Inserir imagens de receitas (URLs de pizza) //TODO - DEPOIS SERÁ O BYTE DA IMAGEM
-INSERT INTO imagensReceitas (idReceita, imagem) VALUES 
-(1, 'https://www.guiadacozinha.com.br/wp-content/uploads/2020/03/pizza-de-calabresa.jpg'),
-(2, 'https://static.itdg.com.br/images/1200-630/72b6a4263d90d1379e27c4c24d2f682a/pizza-de-mussarela.jpg'),
-(3, 'https://img.freepik.com/fotos-premium/pizza-de-queijo-fatiada-na-tabua-de-madeira_93675-133258.jpg');
 
--- Inserir imagens dos usuários (URLs de perfil vazio) //TODO - DEPOIS SERÁ O BYTE DA IMAGEM
-INSERT INTO imagensUsuarios (idUsuario, imagem) VALUES 
-(1, 'https://www.w3schools.com/howto/img_avatar.png'),
-(2, 'https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png'),
-(3, 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png');
+-- -----------------------------------------------------
+-- Table `chefvirtual_db`.`favoritos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `chefvirtual_db`.`favoritos` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `usuario_id` INT NOT NULL,
+  `receita_id` INT NOT NULL,
+  `avaliacao` TINYINT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`, `usuario_id`, `receita_id`),
+  INDEX `fk_usuario_has_receita_receita2_idx` (`receita_id` ASC) VISIBLE,
+  INDEX `fk_usuario_has_receita_usuario2_idx` (`usuario_id` ASC) VISIBLE,
+  CONSTRAINT `fk_usuario_has_receita_receita2`
+    FOREIGN KEY (`receita_id`)
+    REFERENCES `chefvirtual_db`.`receita` (`id`),
+  CONSTRAINT `fk_usuario_has_receita_usuario2`
+    FOREIGN KEY (`usuario_id`)
+    REFERENCES `chefvirtual_db`.`usuario` (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 50
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `chefvirtual_db`.`ingrediente`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `chefvirtual_db`.`ingrediente` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 6
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `chefvirtual_db`.`ingrediente_receita`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `chefvirtual_db`.`ingrediente_receita` (
+  `ingrediente_id` INT NOT NULL,
+  `receita_id` INT NOT NULL,
+  `quantidade` VARCHAR(45) NOT NULL,
+  `medida` VARCHAR(20) NULL DEFAULT NULL,
+  `unidade` VARCHAR(10) NULL DEFAULT NULL,
+  INDEX `fk_ingrediente_has_receita_receita1_idx` (`receita_id` ASC) VISIBLE,
+  INDEX `fk_ingrediente_has_receita_ingrediente1_idx` (`ingrediente_id` ASC) VISIBLE,
+  CONSTRAINT `fk_ingrediente_has_receita_ingrediente1`
+    FOREIGN KEY (`ingrediente_id`)
+    REFERENCES `chefvirtual_db`.`ingrediente` (`id`),
+  CONSTRAINT `fk_ingrediente_has_receita_receita1`
+    FOREIGN KEY (`receita_id`)
+    REFERENCES `chefvirtual_db`.`receita` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `chefvirtual_db`.`login`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `chefvirtual_db`.`login` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `email` VARCHAR(100) NOT NULL,
+  `senha` VARCHAR(225) NOT NULL,
+  `codigo_verificacao_id` INT NULL DEFAULT NULL,
+  `id_usuario` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_login_codigo_verificacao1_idx` (`codigo_verificacao_id` ASC) VISIBLE,
+  INDEX `fk_login_usuario` (`id_usuario` ASC) VISIBLE,
+  CONSTRAINT `fk_login_usuario`
+    FOREIGN KEY (`id_usuario`)
+    REFERENCES `chefvirtual_db`.`usuario` (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 32
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `chefvirtual_db`.`palavrarestrita`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `chefvirtual_db`.`palavrarestrita` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `chefvirtual_db`.`palavroes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `chefvirtual_db`.`palavroes` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `palavra` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 301
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

@@ -5,7 +5,7 @@ async function GetAllReceitas() {
     const conexao = await pool.getConnection()
     try {
         const query =
-                `
+            `
                     SELECT 
                         r.id, r.titulo, r.imagem, 
                         u.id AS usuarioId, u.nome
@@ -19,12 +19,13 @@ async function GetAllReceitas() {
             tituloReceita: row.titulo,
             descricao: row.descricao,
             tempoPreparo: row.tempo_preparo,
+            qtn_pessoas: row.qtn_pessoas,
             usuario: {
                 id: row.usuarioId,
                 nome: row.nome,
             },
             imagemReceita: row.imagem ? row.imagem.toString('base64') : null,
-    }));
+        }));
         return receitas;
     }
     catch (ex) {
@@ -38,9 +39,9 @@ async function GetAllReceitas() {
 async function GetReceita(receitaid) {
     const conexao = await pool.getConnection();
     try {
-const query = `
+        const query = `
             SELECT 
-                r.titulo, r.descricao, r.imagem, r.tempo_preparo,
+                r.titulo, r.descricao, r.imagem, r.tempo_preparo, r.qtn_pessoas,
                 u.id AS userId, u.nome AS usuarioNome,
                 i.nome AS ingredienteNome,
                 ir.quantidade, ir.medida,
@@ -98,6 +99,7 @@ const query = `
             tituloReceita: row.titulo,
             descricao: row.descricao,
             tempoPreparo: row.tempo_preparo,
+            qtn_pessoas: row.qtn_pessoas,
             favoritos: {
                 totalFavoritos: row.totalFavoritos || 0,
                 mediaFavoritos: parseFloat(row.mediaAvaliacao) || 0
@@ -143,11 +145,12 @@ async function GetReceitasByTitle(name) {
 
         const search = `%${name}%`
         const resQuery = await executaQuery(conexao, query, [search])
-        
+
         const receitas = resQuery.map(row => ({
             id: row.id,
             tituloReceita: row.titulo,
             tempoPreparo: row.tempo_preparo,
+            qtn_pessoas: row.qtn_pessoas,
             usuario: {
                 id: row.usuarioId,
                 nome: row.nome,
@@ -182,18 +185,19 @@ async function GetReceitasByCategoria(idCategoria) {
             `
 
         const resQuery = await executaQuery(conexao, query, [idCategoria])
-        
+
         const receitas = resQuery.map(row => ({
             id: row.id,
             tituloReceita: row.titulo,
             descricao: row.descricao,
             tempoPreparo: row.tempo_preparo,
+                        qtn_pessoas: row.qtn_pessoas,
             usuario: {
                 id: row.usuarioId,
                 nome: row.nome,
             },
             imagemReceita: row.imagem ? row.imagem.toString('base64') : null,
-            }));
+        }));
 
         return receitas;
     }
@@ -225,6 +229,7 @@ async function GetReceitasByUser(userId) {
             tituloReceita: row.titulo,
             descricao: row.descricao,
             tempoPreparo: row.tempo_preparo,
+                        qtn_pessoas: row.qtn_pessoas,
             usuario: {
                 id: row.usuarioId,
                 nome: row.nome,
@@ -243,70 +248,70 @@ async function GetReceitasByUser(userId) {
 }
 
 async function UpdateReceitasPartial(userId, dados) {
-  const conexao = await pool.getConnection();
+    const conexao = await pool.getConnection();
 
-  try {
-    const receitaId = Number(dados.idReceita);
+    try {
+        const receitaId = Number(dados.idReceita);
 
-    const [receita] = await executaQuery(conexao, `
+        const [receita] = await executaQuery(conexao, `
       SELECT * FROM receita WHERE id = ? AND usuario_id = ?
     `, [receitaId, userId]);
 
-    if (!receita) {
-      return { sucesso: false };
-    }
+        if (!receita) {
+            return { sucesso: false };
+        }
 
-    const camposPermitidos = ['titulo', 'descricao', 'imagem', 'tempo_preparo'];
-    const camposAtualizar = {};
+        const camposPermitidos = ['titulo', 'descricao', 'imagem', 'tempo_preparo', '            qtn_pessoas'];
+        const camposAtualizar = {};
 
-    for (const campo of camposPermitidos) {
-      if (dados[campo]) {
-        camposAtualizar[campo] = dados[campo];
-      }
-    }
+        for (const campo of camposPermitidos) {
+            if (dados[campo]) {
+                camposAtualizar[campo] = dados[campo];
+            }
+        }
 
-    if (Object.keys(camposAtualizar).length > 0) {
-      const campos = Object.keys(camposAtualizar).map(campo => `${campo} = ?`).join(', ');
-      const valores = Object.values(camposAtualizar);
+        if (Object.keys(camposAtualizar).length > 0) {
+            const campos = Object.keys(camposAtualizar).map(campo => `${campo} = ?`).join(', ');
+            const valores = Object.values(camposAtualizar);
 
-      await executaQuery(conexao, `
+            await executaQuery(conexao, `
         UPDATE receita SET ${campos} WHERE id = ?
       `, [...valores, receitaId]);
-    }
+        }
 
-    if (Array.isArray(dados.ingredientes)) {
-      await executaQuery(conexao, `DELETE FROM ingrediente_receita WHERE receita_id = ?`, [receitaId]);
+        if (Array.isArray(dados.ingredientes)) {
+            await executaQuery(conexao, `DELETE FROM ingrediente_receita WHERE receita_id = ?`, [receitaId]);
 
-      for (const ingrediente of dados.ingredientes) {
-        const { idIngredienteDb, quantidade, medida, unidade } = ingrediente;
+            for (const ingrediente of dados.ingredientes) {
+                const { idIngredienteDb, quantidade, medida, unidade } = ingrediente;
 
-        await executaQuery(conexao, `
+                await executaQuery(conexao, `
           INSERT INTO ingrediente_receita (receita_id, ingrediente_id, quantidade, medida, unidade)
           VALUES (?, ?, ?, ?, ?)
         `, [receitaId, idIngredienteDb, quantidade, medida, unidade]);
-      }
-    }
+            }
+        }
 
-    if (Array.isArray(dados.etapas)) {
-      await executaQuery(conexao, `DELETE FROM etapa WHERE receita_id = ?`, [receitaId]);
+        if (Array.isArray(dados.etapas)) {
+            await executaQuery(conexao, `DELETE FROM etapa WHERE receita_id = ?`, [receitaId]);
 
-      for (const etapa of dados.etapas) {
-        const { numeroEtapa, descricao } = etapa;
+            for (const etapa of dados.etapas) {
+                const { numeroEtapa, descricao } = etapa;
 
-        await executaQuery(conexao, `
+                await executaQuery(conexao, `
           INSERT INTO etapa (receita_id, numeroEtapa, descricao)
           VALUES (?, ?, ?)
         `, [receitaId, numeroEtapa, descricao]);
-      }
-    }
+            }
+        }
 
-    return { sucesso: true };
-  } catch (error) {
-    console.error('Erro em UpdateReceitasPartial:', error);
-    throw error;
-  } finally {
-    conexao.release();
-  }
+        return { sucesso: true };
+    } catch (error) {
+        console.error('Erro em UpdateReceitasPartial:', error);
+        throw error;
+    } finally {
+        conexao.release();
+    }
 }
 
 export {

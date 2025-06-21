@@ -103,28 +103,33 @@ export async function getReceitasByUser(req, res) {
 export async function patchReceitas(req, res) {
   const { idUsuario } = req.query;
   const dados = req.body;
+  const imagem = req.file ? req.file.buffer : null;
 
   if (!idUsuario || isNaN(Number(idUsuario))) {
-    return res.status(400).json({ erro: 'O parâmetro idUsuario é obrigatório na query.' });
+    return res.status(400).json({ erro: 'O parâmetro "idUsuario" é obrigatório e deve ser um número.' });
   }
 
   if (!dados || typeof dados !== 'object' || Object.keys(dados).length === 0) {
-    return res.status(400).json({ erro: 'O corpo da requisição está vazio.' });
+    return res.status(400).json({ erro: 'O corpo da requisição está vazio ou inválido.' });
   }
 
   if (!dados.idReceita || isNaN(Number(dados.idReceita))) {
-    return res.status(400).json({ erro: 'O campo "id" da receita é obrigatório no corpo da requisição.' });
+    return res.status(400).json({ erro: 'O campo "idReceita" é obrigatório e deve ser um número.' });
   }
 
   try {
+    if (imagem) {
+      dados.imagem = imagem;
+    }
+
     const resultado = await UpdateReceitasPartial(Number(idUsuario), dados);
 
     if (resultado?.sucesso) {
-      res.status(200).json({ mensagem: 'Receita atualizada com sucesso!' });
+      return res.status(200).json({ mensagem: 'Receita atualizada com sucesso!' });
     } else {
-      res.status(404).json({ erro: 'Receita não encontrada ou não pertence ao usuário.' });
+      return res.status(404).json({ erro: 'Receita não encontrada ou não pertence ao usuário.' });
     }
   } catch (error) {
-    res.status(500).json({ erro: 'Erro ao atualizar a receita.', detalhes: error.message });
+    return res.status(500).json({ erro: 'Erro ao atualizar a receita.', detalhes: error.message });
   }
 }

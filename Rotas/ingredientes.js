@@ -1,6 +1,6 @@
 import express from 'express';
 import { PostIngredientes } from '../Consultas/pubReceita.js';
-
+import { getIngredientes } from '../Consultas/ingredientes.js';
 const router = express.Router();
 
 /**
@@ -27,6 +27,22 @@ router.post('/:idReceita', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ erro: 'Erro ao adicionar ingredientes.' });
+  }
+});
+
+/**
+ * GET /api/ingredientes
+ * @tags Ingredientes
+ * @summary Retorna todos os ingredientes cadastrados
+ * @return {array<object>} 200 - Lista de ingredientes
+ */
+router.get('/', async (req, res) => {
+  try {
+    const ingredientes = await getIngredientes();
+    res.status(200).json(ingredientes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ erro: 'Erro ao buscar ingredientes.' });
   }
 });
 

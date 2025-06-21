@@ -1,7 +1,7 @@
 import pool from '../config/conexao.js';
 import { executaQuery } from '../config/dbInstance.js';
 
-export async function PostReceita(titulo, descricao, imagem, tempo_preparo, idUsuario) {
+export async function PostReceita(titulo, descricao, imagem, tempo_preparo, idUsuario, qtn_pessoas) {
   const conexao = await pool.getConnection();
   try {
     const palavrasQuery = await executaQuery(conexao, `SELECT nome FROM palavrarestrita`);
@@ -14,8 +14,8 @@ export async function PostReceita(titulo, descricao, imagem, tempo_preparo, idUs
       throw new Error(`Não é permitido a inserção de palavras inadequadas na receita.`);
     }
 
-    const query = `INSERT INTO receita (titulo, descricao, imagem, tempo_preparo) VALUES (?, ?, ?, ?)`;
-    const resultado = await executaQuery(conexao, query, [titulo, descricao, imagem, tempo_preparo]);
+    const query = `INSERT INTO receita (titulo, descricao, imagem, usuario_id, tempo_preparo, qtn_pessoas ) VALUES (?, ?, ?, ?, ?, ?)`;
+    const resultado = await executaQuery(conexao, query, [titulo, descricao, imagem, idUsuario, tempo_preparo, qtn_pessoas, ]);
 
     return {
       id: resultado.insertId,
@@ -24,6 +24,7 @@ export async function PostReceita(titulo, descricao, imagem, tempo_preparo, idUs
       descricao,
       imagem,
       tempo_preparo,
+      qtn_pessoas,
     };
   } catch (error) {
     console.log(error);
@@ -73,26 +74,63 @@ export async function PostEtapas(etapas, idReceita) {
 export async function PostIngredientes(ingredientes, idReceita) {
   const conexao = await pool.getConnection();
   try {
+    // Busca todos os ingredientes existentes no banco
+    const ingredientesExistentes = await executaQuery(conexao, `SELECT id, nome FROM ingrediente`);
+    const mapIngredientes = new Map(
+      ingredientesExistentes.map((ing) => [ing.nome.toLowerCase(), ing.id])
+    );
 
-    const values = ingredientes.map(() => '(?, ?, ?, ?, ?)').join(', ');
-    const parametros = ingredientes.flatMap(ingrediente => [ingrediente.idIngredienteDb, idReceita, ingrediente.quantidade, ingrediente.medida, ingrediente.unidade]);
+    const ingredientesFinal = [];
 
-    const query = `INSERT INTO ingrediente_receita (ingrediente_id, receita_id, quantidade, medida, unidade) VALUES ${values}`;
-    const resultado = await executaQuery(conexao, query, parametros);
+    // Para cada ingrediente recebido, verifica se já existe ou precisa ser inserido
+    for (const ing of ingredientes) {
+      const nomeNormalizado = ing.nome.trim().toLowerCase();
+      let idIngrediente;
+
+      if (mapIngredientes.has(nomeNormalizado)) {
+        // Já existe
+        idIngrediente = mapIngredientes.get(nomeNormalizado);
+      } else {
+        // Não existe, insere novo ingrediente e pega o ID
+        const insertIng = await executaQuery(
+          conexao,
+          `INSERT INTO ingrediente (nome) VALUE (?)`,
+          [ing.nome]
+        );
+        idIngrediente = insertIng.insertId;
+        mapIngredientes.set(nomeNormalizado, idIngrediente); // Atualiza o mapa para evitar duplicações
+      }
+
+      ingredientesFinal.push({
+        idIngredienteDb: idIngrediente,
+        quantidade: ing.quantidade,
+        medida: ing.medida,
+        unidade: ing.unidade,
+      });
+    }
+
+    // Monta a query para inserir na tabela ingrediente_receita
+    const values = ingredientesFinal.map(() => '(?, ?, ?, ?, ?)').join(', ');
+    const parametros = ingredientesFinal.flatMap(ing =>
+      [ing.idIngredienteDb, idReceita, ing.quantidade, ing.medida, ing.unidade]
+    );
+
+    const query = `
+      INSERT INTO ingrediente_receita 
+      (ingrediente_id, receita_id, quantidade, medida, unidade) 
+      VALUES ${values}
+    `;
+    await executaQuery(conexao, query, parametros);
 
     return {
       mensagem: 'Ingredientes inseridos com sucesso na receita.',
-      IngredientesInseridos: ingredientes.length,
+      IngredientesInseridos: ingredientesFinal.length,
       idReceita: idReceita,
     };
-  }
-  catch(error)
-  {
+  } catch (error) {
     console.log(error);
     throw error;
-  }
-  finally
-  {
+  } finally {
     conexao.release();
   }
 }

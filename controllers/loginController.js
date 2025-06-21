@@ -49,14 +49,14 @@ export async function confirmarLogin(req, res) {
     const { token, id } = await ConfirmarLogin(email, senha);
 
     res.cookie('token', token, {
-      httpOnly: true,
+      httpOnly: false,
       secure: true,        // true se estiver usando HTTPS
       sameSite: 'Strict',
       maxAge: 3600000      // 1 hora
     });
 
     res.cookie('id', id, {
-      httpOnly: true,
+      httpOnly: false,
       secure: true,
       sameSite: 'Strict',
       maxAge: 3600000
