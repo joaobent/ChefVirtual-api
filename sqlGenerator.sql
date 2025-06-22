@@ -254,3 +254,26 @@ COLLATE = utf8mb4_0900_ai_ci;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+-- -----------------------------------------------------
+-- Table `chefvirtual_db`.`historico`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `chefvirtual_db`.`historico` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `usuario_id` INT NOT NULL,
+  `receita_id` INT NOT NULL,
+  `data_visualizacao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `fk_historico_usuario_idx` (`usuario_id` ASC) VISIBLE,
+  INDEX `fk_historico_receita_idx` (`receita_id` ASC) VISIBLE,
+  CONSTRAINT `fk_historico_usuario`
+    FOREIGN KEY (`usuario_id`)
+    REFERENCES `chefvirtual_db`.`usuario` (`id`)
+    ON DELETE CASCADE,
+  CONSTRAINT `fk_historico_receita`
+    FOREIGN KEY (`receita_id`)
+    REFERENCES `chefvirtual_db`.`receita` (`id`)
+    ON DELETE CASCADE
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
