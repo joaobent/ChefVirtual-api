@@ -50,14 +50,14 @@ export async function confirmarLogin(req, res) {
 
     res.cookie('token', token, {
       httpOnly: false,
-      secure: true,        // true se estiver usando HTTPS
+      secure: process.env.NODE_ENV === 'production',        // true se estiver usando HTTPS
       sameSite: 'Strict',
       maxAge: 3600000      // 1 hora
     });
 
     res.cookie('id', id, {
       httpOnly: false,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'Strict',
       maxAge: 3600000
     });
