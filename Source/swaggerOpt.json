@@ -37,7 +37,11 @@
     {
       "name": "Categorias",
       "description": "Operações relacionadas às categorias"
-    }
+    },
+    {
+  "name": "Histórico",
+  "description": "Operações relacionadas ao histórico de visualizações do usuário"
+    },
   ],
   "paths": {
     "/api/Receitas/": {
