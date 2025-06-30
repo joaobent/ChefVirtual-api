@@ -229,6 +229,100 @@
         }
       }
     },
+    "/api/Historico": {
+  "get": {
+    "tags": ["Histórico"],
+    "description": "Retorna o histórico de visualizações de um usuário com os dados da receita (título, descrição, imagem)",
+    "parameters": [
+      {
+        "name": "idUsuario",
+        "in": "query",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "example": 2
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Histórico retornado com sucesso",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "integer", "example": 1 },
+                  "usuario_id": { "type": "integer", "example": 2 },
+                  "receita_id": { "type": "integer", "example": 5 },
+                  "data_visualizacao": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2025-06-30T14:35:00Z"
+                  },
+                  "titulo": { "type": "string", "example": "Bolo de Cenoura" },
+                  "descricao": { "type": "string", "example": "Com cobertura de chocolate" },
+                  "imagem": {
+                    "type": "string",
+                    "example": "https://cdn.chefvirtual/imagens/bolo.png"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": { "description": "Parâmetro inválido" },
+      "404": { "description": "Nenhum histórico encontrado" },
+      "500": { "description": "Erro interno ao buscar histórico" }
+    }
+  },
+  "post": {
+    "tags": ["Histórico"],
+    "description": "Adiciona uma visualização de receita ao histórico do usuário",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["idUsuario", "idReceita"],
+            "properties": {
+              "idUsuario": { "type": "integer", "example": 2 },
+              "idReceita": { "type": "integer", "example": 5 }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": { "description": "Item adicionado ao histórico" },
+      "400": { "description": "Requisição inválida" },
+      "500": { "description": "Erro interno ao salvar histórico" }
+    }
+  }
+},
+"/api/Historico/{idUsuario}": {
+  "delete": {
+    "tags": ["Histórico"],
+    "description": "Remove todo o histórico de visualizações do usuário informado",
+    "parameters": [
+      {
+        "name": "idUsuario",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "integer", "example": 2 }
+      }
+    ],
+    "responses": {
+      "200": { "description": "Histórico apagado com sucesso" },
+      "404": { "description": "Histórico não encontrado" },
+      "500": { "description": "Erro interno ao apagar histórico" }
+    }
+  }
+},
     "/api/Categorias/": {
       "get": {
         "description": "",
