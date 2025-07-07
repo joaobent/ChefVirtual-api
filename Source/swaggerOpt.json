@@ -41,7 +41,7 @@
     {
   "name": "Histórico",
   "description": "Operações relacionadas ao histórico de visualizações do usuário"
-    },
+    }
   ],
   "paths": {
     "/api/Receitas/": {
