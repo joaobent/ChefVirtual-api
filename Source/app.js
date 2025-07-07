@@ -14,8 +14,8 @@ import usuarioRouter from '../Rotas/usuarioRotas.js'
 import pubReceita from '../Rotas/pubReceita.js'
 import etapasRouter from '../Rotas/etapas.js';
 import ingredientesRouter from '../Rotas/ingredientes.js';
-//import historicoRotas from '../Rotas/historicoRotas.js'
-import pool from '../config/conexao.js'
+import historicoRotas from '../Rotas/historicoRotas.js':
+import pool from '../config/conexao.js':
 import http from 'http'
 
 
