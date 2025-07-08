@@ -19,6 +19,7 @@ import pool from '../config/conexao.js';
 import http from 'http'
 
 
+
 const app = express();
 const PORT = 9000;
 
