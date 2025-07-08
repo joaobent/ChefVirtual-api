@@ -22,6 +22,7 @@ const doc = {
     { name: 'Verificação', description: 'Operações relacionadas ao código de verificação.\nController relacionado com o fluxo de login' },
     { name: 'Publicação', description: 'Operações relacionadas à publicação de receitas' },
     { name: 'Categorias', description: 'Operações relacionadas às categorias' },
+    { name: 'Historico', description: 'Operações relacionadas ao historico dos usuarios' },
   ],
   definitions: {
     ReceitaPatch: {

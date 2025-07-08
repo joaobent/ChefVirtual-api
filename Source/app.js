@@ -4,17 +4,18 @@ import swaggerUi from 'swagger-ui-express'
 import swaggerDocument from './swaggerOpt.json' with { type: 'json' };
 import cookieParser from 'cookie-parser';
 
-import receitasRotas from '../Rotas/receitasRotas.js'
-import categoriaRotas from '../Rotas/categoriaRotas.js'
-import comentariosRotas from '../Rotas/comentariosRotas.js'
-import favoritoRotas from '../Rotas/favoritoRotas.js'
-import loginRouter from '../Rotas/loginRotas.js'
+import receitasRotas from '../Rotas/receitasRotas.js';
+import categoriaRotas from '../Rotas/categoriaRotas.js';
+import comentariosRotas from '../Rotas/comentariosRotas.js';
+import favoritoRotas from '../Rotas/favoritoRotas.js';
+import loginRouter from '../Rotas/loginRotas.js';
 import codigoVerificacao from '../Rotas/codigoVerificacao.js';
-import usuarioRouter from '../Rotas/usuarioRotas.js'
-import pubReceita from '../Rotas/pubReceita.js'
+import usuarioRouter from '../Rotas/usuarioRotas.js';
+import pubReceita from '../Rotas/pubReceita.js';
 import etapasRouter from '../Rotas/etapas.js';
 import ingredientesRouter from '../Rotas/ingredientes.js';
-import pool from '../config/conexao.js'
+import historicoRotas from '../Rotas/historicoRotas.js';
+import pool from '../config/conexao.js';
 import http from 'http'
 
 
@@ -48,6 +49,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/api/Receitas', receitasRotas); // prefixa as rotas das receitas com /api
+app.use('/api/Historico', historicoRotas);
 app.use('/api/Categorias', categoriaRotas);
 app.use('/api/Comentarios', comentariosRotas);
 app.use('/api/Favoritos', favoritoRotas);

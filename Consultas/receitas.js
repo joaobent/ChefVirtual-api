@@ -156,7 +156,7 @@ async function GetReceitasByTitle(name) {
                 nome: row.nome,
             },
             mediaAvaliacao: row.mediaAvaliacao || 0,
-            imagemReceita: row.imagem.toString()
+            imagemReceita: row.imagem ? row.imagem.toString('base64') : null,
         }));
 
         return receitas;
