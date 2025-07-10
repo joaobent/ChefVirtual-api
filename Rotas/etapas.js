@@ -1,5 +1,6 @@
 import express from 'express';
 import { PostEtapas } from '../Consultas/pubReceita.js';
+import { getEtapasPorReceita } from '../Consultas/etapas.js';
 
 const router = express.Router();
 
@@ -32,5 +33,24 @@ router.post('/:idReceita', async (req, res) => {
     res.status(500).json({ erro: 'Erro ao adicionar etapas.' });
   }
 });
+
+
+// GET /api/etapas?idReceita=5
+router.get('/', async (req, res) => {
+  const idReceita = parseInt(req.query.idReceita);
+
+  if (!idReceita) {
+    return res.status(400).json({ erro: 'ID da receita é obrigatório.' });
+  }
+
+  try {
+    const etapas = await getEtapasPorReceita(idReceita);
+    res.status(200).json(etapas);
+  } catch (error) {
+    console.error('Erro ao buscar etapas da receita:', error);
+    res.status(500).json({ erro: 'Erro ao buscar etapas da receita.' });
+  }
+});
+
 
 export default router;
