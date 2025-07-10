@@ -7,7 +7,8 @@ import {
   PatchUsuario,
   PostUsuario,
   PutUsuario,
-  DeleteUsuario
+  DeleteUsuario,
+  UpdateSenha
 } from "../Consultas/usuario.js";
 
 import multer from 'multer';
@@ -32,7 +33,6 @@ export async function getUsuarioByTitle(req, res) {
   if (!nome) {
     return res.status(400).json({ erro: 'Parâmetro "nome" é obrigatório' });
   }
-
   try {
     const usuario = await GetUsuarioByName(nome);
     if (!usuario || usuario.length === 0) {
@@ -50,7 +50,6 @@ export async function getUsuarioByEmail(req, res) {
   if (!email) {
     return res.status(400).json({ erro: 'Parâmetro "email" é obrigatório' });
   }
-
   try {
     const usuario = await GetUsuarioByEmail(email);
     if (!usuario || usuario.length === 0) {
@@ -64,19 +63,18 @@ export async function getUsuarioByEmail(req, res) {
 }
 
 export async function getUsuarioById(req, res) {
-  const { idUsuario } = req.params;
-  if (!idUsuario) {
-    return res.status(400).json({ erro: 'Parâmetro "idUsuario" é obrigatório' });
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ erro: 'Parâmetro "id" é obrigatório' });
   }
-
   try {
-    const usuario = await GetUsuarioById(idUsuario);
-    if (!usuario) {
+    const usuario = await GetUsuarioById(id);
+    if (!usuario || usuario.length === 0) {
       return res.status(404).json({ erro: 'Usuário não encontrado' });
     }
-    res.status(200).json(usuario);
+    res.status(200).json(usuario[0]);
   } catch (error) {
-    console.error(`Erro ao buscar usuário com ID ${idUsuario}:`, error);
+    console.error(`Erro ao buscar usuário com ID ${id}:`, error);
     res.status(500).json({ erro: 'Erro interno na busca por ID' });
   }
 }
@@ -84,16 +82,13 @@ export async function getUsuarioById(req, res) {
 export async function postUsuario(req, res) {
   const { nome, email, facebook, instagram, youtube, senha } = req.body;
   const imagemUsuario = req.file ? req.file.buffer : null;
-
   try {
-    const usuario = GetUsuarioByEmail(email)
-    if (usuario.length > 0) {
-      throw new Error('Email já registrado')
+    const usuarioExistente = await GetUsuarioByEmail(email);
+    if (usuarioExistente.length > 0) {
+      return res.status(409).json({ erro: 'Email já registrado' });
     }
-
     const resultado = await PostUsuario(nome, email, imagemUsuario, facebook, instagram, youtube);
     const resultadoLogin = await PostLogin(email, senha, resultado.insertId);
-
     res.status(201).json({
       mensagem: 'Usuário e login criados com sucesso',
       idUsuario: resultado.insertId,
@@ -111,7 +106,7 @@ export async function putUsuario(req, res) {
   const imagemUsuario = req.file ? req.file.buffer : null;
   try {
     await PutUsuario(id, nome, email, imagemUsuario, facebook, instagram, youtube);
-    await PutLogin(id, email, senha)
+    await PutLogin(id, email, senha);
     res.status(200).json({ mensagem: 'Usuário atualizado com sucesso' });
   } catch (error) {
     console.error('Erro ao atualizar usuário:', error);
@@ -123,37 +118,31 @@ export async function patchUsuario(req, res) {
   const { id } = req.params;
   const { nome, email, facebook, instagram, youtube, senha } = req.body;
   const imagemUsuario = req.file ? req.file.buffer : null;
-  const dados = {};
-  if (nome) dados.nome = nome;
-  if (email) dados.email = email;
-  if (facebook) dados.facebook = facebook;
-  if (instagram) dados.instagram = instagram;
-  if (youtube) dados.youtube = youtube;
-  if (imagemUsuario) dados.imagem = imagemUsuario
 
-  const dadosLogin = {}
+  const dadosUsuario = {};
+  if (nome) dadosUsuario.nome = nome;
+  if (email) dadosUsuario.email = email;
+  if (facebook) dadosUsuario.facebook = facebook;
+  if (instagram) dadosUsuario.instagram = instagram;
+  if (youtube) dadosUsuario.youtube = youtube;
+  if (imagemUsuario) dadosUsuario.imagem = imagemUsuario;
+
+  const dadosLogin = {};
   if (email) dadosLogin.email = email;
   if (senha) dadosLogin.senha = senha;
 
-  if (Object.keys(dados).length === 0 && Object.keys(dadosLogin).length === 0) {
+  if (Object.keys(dadosUsuario).length === 0 && Object.keys(dadosLogin).length === 0) {
     return res.status(400).json({ mensagem: 'Ao menos um campo deve ser preenchido' });
   }
 
   try {
-    if (Object.keys(dadosLogin).length !== 0 && Object.keys(dados).length === 0) {
+    if (Object.keys(dadosLogin).length > 0) {
       await PatchLogin(id, dadosLogin);
-      res.status(200).json({ mensagem: 'Usuário atualizado parcialmente com sucesso' });
     }
-
-    if (Object.keys(dados).length !== 0 &&  Object.keys(dadosLogin).length === 0) {
-      await PatchUsuario(id, dados);
-      res.status(200).json({ mensagem: 'Usuário atualizado parcialmente com sucesso' });
+    if (Object.keys(dadosUsuario).length > 0) {
+      await PatchUsuario(id, dadosUsuario);
     }
-    if (Object.keys(dados).length !== 0 && Object.keys(dadosLogin).length !== 0) {
-      await PatchLogin(id, dadosLogin);
-      await PatchUsuario(id, dados);
-      res.status(200).json({ mensagem: 'Usuário atualizado parcialmente com sucesso' })
-    }
+    res.status(200).json({ mensagem: 'Usuário atualizado parcialmente com sucesso' });
   } catch (error) {
     console.error('Erro no patch:', error);
     res.status(500).json({ erro: 'Erro ao atualizar parcialmente o usuário' });
@@ -162,14 +151,16 @@ export async function patchUsuario(req, res) {
 
 export async function deleteUsuario(req, res) {
   const { id } = req.params;
-
+  if (!id) {
+    return res.status(400).json({ erro: 'Parâmetro "id" é obrigatório' });
+  }
   try {
     await DeleteLogin(id);
     await DeleteUsuario(id);
-
     res.status(200).json({ mensagem: 'Usuário deletado com sucesso' });
   } catch (error) {
     console.error('Erro ao deletar usuário:', error);
     res.status(500).json({ erro: 'Erro ao deletar usuário' });
   }
 }
+
