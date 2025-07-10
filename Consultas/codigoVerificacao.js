@@ -51,7 +51,7 @@ async function GetCodigoVerificacaoByEmail(email) {
 
     const codigo = resposta[0];
 
-    console.log(codigo.codigo_verificacao)
+    //console.log(codigo.codigo_verificacao)
     return {
       id: codigo.id,
       codigo_verificacao: codigo.codigo_verificacao

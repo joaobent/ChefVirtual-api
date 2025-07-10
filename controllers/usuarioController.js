@@ -87,8 +87,7 @@ export async function postUsuario(req, res) {
 
   try {
     const usuario = GetUsuarioByEmail(email)
-    if(usuario.length > 0)
-    {
+    if (usuario.length > 0) {
       throw new Error('Email já registrado')
     }
 
@@ -136,17 +135,25 @@ export async function patchUsuario(req, res) {
   if (email) dadosLogin.email = email;
   if (senha) dadosLogin.senha = senha;
 
-  if (Object.keys(dados).length === 0) {
+  if (Object.keys(dados).length === 0 && Object.keys(dadosLogin).length === 0) {
     return res.status(400).json({ mensagem: 'Ao menos um campo deve ser preenchido' });
   }
 
-  if (Object.keys(dadosLogin).length !== 0) {
-    await PatchLogin(id, dadosLogin);
-  }
-
   try {
-    await PatchUsuario(id, dados);
-    res.status(200).json({ mensagem: 'Usuário atualizado parcialmente com sucesso' });
+    if (Object.keys(dadosLogin).length !== 0 && Object.keys(dados).length === 0) {
+      await PatchLogin(id, dadosLogin);
+      res.status(200).json({ mensagem: 'Usuário atualizado parcialmente com sucesso' });
+    }
+
+    if (Object.keys(dados).length !== 0 &&  Object.keys(dadosLogin).length === 0) {
+      await PatchUsuario(id, dados);
+      res.status(200).json({ mensagem: 'Usuário atualizado parcialmente com sucesso' });
+    }
+    if (Object.keys(dados).length !== 0 && Object.keys(dadosLogin).length !== 0) {
+      await PatchLogin(id, dadosLogin);
+      await PatchUsuario(id, dados);
+      res.status(200).json({ mensagem: 'Usuário atualizado parcialmente com sucesso' })
+    }
   } catch (error) {
     console.error('Erro no patch:', error);
     res.status(500).json({ erro: 'Erro ao atualizar parcialmente o usuário' });
@@ -159,7 +166,7 @@ export async function deleteUsuario(req, res) {
   try {
     await DeleteLogin(id);
     await DeleteUsuario(id);
-    
+
     res.status(200).json({ mensagem: 'Usuário deletado com sucesso' });
   } catch (error) {
     console.error('Erro ao deletar usuário:', error);
