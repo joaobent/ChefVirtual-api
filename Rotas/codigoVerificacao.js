@@ -17,7 +17,7 @@ router.get('/codigo',
   // #swagger.description = 'Realiza a busca de todos os códigos de verificação.'
 );
 
-router.get('/GetCodigoPorEmail/', 
+router.get('/GetCodigoPorEmail', 
   buscarCodigoPorEmail
   // #swagger.tags = ['Verificação']
   // #swagger.description = 'Realiza a busca do código de verificação a partir do login realizado.'
