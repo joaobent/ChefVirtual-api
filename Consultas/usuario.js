@@ -89,7 +89,7 @@ async function GetUsuarioByEmail(email) {
 async function GetUsuarioById(id) {
   const conexao = await pool.getConnection();
   try {
-    const query = `SELECT usuario.id, usuario.nome, usuario.email, usuario.facebook, usuario.instagram, usuario.youtube, usuario.imagem AS imagemUsuario, login.senha, codigo_verificacao.codigo_verificacao 
+    const query = `SELECT usuario.id, usuario.nome, usuario.email, usuario.facebook, usuario.instagram, usuario.biografia, usuario.youtube, usuario.imagem AS imagemUsuario, login.senha, codigo_verificacao.codigo_verificacao 
                    FROM usuario 
                    INNER JOIN login ON usuario.id = login.id_usuario 
                    INNER JOIN codigo_verificacao ON login.codigo_verificacao_id = codigo_verificacao.id 
@@ -101,6 +101,7 @@ async function GetUsuarioById(id) {
       email: usuario.email,
       facebook: usuario.facebook,
       instagram: usuario.instagram,
+      biografia: usuario.biografia,
       youtube: usuario.youtube,
       imagemUsuario: usuario.imagemUsuario,
       senha: usuario.senha,
@@ -132,11 +133,11 @@ async function PostUsuario(nome, email, imagem, facebook, instagram, youtube) {
   }
 }
 
-async function PutUsuario(id, nome, email, imagem, facebook, instagram, youtube) {
+async function PutUsuario(id, nome, email, imagem, facebook, instagram, youtube, biografia) {
   const conexao = await pool.getConnection();
   try {
-    const query = `UPDATE usuario SET nome = ?, email = ?, imagem = ?, facebook = ?, instagram = ?, youtube = ? WHERE id = ?`;
-    await executaQuery(conexao, query, [nome, email, imagem, facebook, instagram, youtube, id]);
+    const query = `UPDATE usuario SET nome = ?, email = ?, imagem = ?, facebook = ?, instagram = ?, youtube = ?, biografia = ? WHERE id = ?`;
+    await executaQuery(conexao, query, [nome, email, imagem, facebook, instagram, youtube, biografia, id]);
   } catch (error) {
     console.error(error);
     throw error;
