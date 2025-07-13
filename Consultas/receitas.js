@@ -314,7 +314,85 @@ async function UpdateReceitasPartial(userId, dados) {
     }
 }
 
+async function GetReceitasBuscaAvancada({ ingredientes = [], notaMinima, tempoMinimo, tempoMaximo, tipo }) {
+    const conexao = await pool.getConnection();
+    try {
+        let query = `
+            SELECT 
+                r.id, r.titulo, r.imagem, r.tempo_preparo, r.descricao, r.qtn_pessoas,
+                u.id AS usuarioId, u.nome AS usuarioNome,
+                ROUND(AVG(f.avaliacao), 1) AS mediaAvaliacao
+            FROM receita AS r
+            INNER JOIN usuario AS u ON r.usuario_id = u.id
+            LEFT JOIN favoritos AS f ON r.id = f.receita_id
+        `;
+
+        const whereClauses = [];
+        const params = [];
+
+        if (ingredientes.length > 0) {
+            query += `
+                INNER JOIN ingrediente_receita AS ir ON r.id = ir.receita_id
+                INNER JOIN ingrediente AS i ON ir.ingrediente_id = i.id
+            `;
+            whereClauses.push(`i.nome IN (${ingredientes.map(() => '?').join(', ')})`);
+            params.push(...ingredientes);
+        }
+
+        if (notaMinima) {
+            whereClauses.push(`f.avaliacao >= ?`);
+            params.push(Number(notaMinima));
+        }
+
+        if (tempoMinimo !== undefined) {
+            whereClauses.push(`r.tempo_preparo >= ?`);
+            params.push(Number(tempoMinimo));
+        }
+
+        if (tempoMaximo !== undefined) {
+            whereClauses.push(`r.tempo_preparo <= ?`);
+            params.push(Number(tempoMaximo));
+        }
+
+        if (tipo) {
+            whereClauses.push(`(r.titulo LIKE ? OR r.descricao LIKE ?)`);
+            params.push(`%${tipo}%`, `%${tipo}%`);
+        }
+
+        if (whereClauses.length > 0) {
+            query += ` WHERE ` + whereClauses.join(' AND ');
+        }
+
+        query += `
+            GROUP BY r.id, r.titulo, r.imagem, r.tempo_preparo, r.descricao, r.qtn_pessoas, u.id, u.nome
+            ORDER BY r.id DESC
+        `;
+
+        const resQuery = await executaQuery(conexao, query, params);
+
+        return resQuery.map(row => ({
+            id: row.id,
+            tituloReceita: row.titulo,
+            tempoPreparo: row.tempo_preparo,
+            descricao: row.descricao,
+            qtn_pessoas: row.qtn_pessoas,
+            usuario: {
+                id: row.usuarioId,
+                nome: row.usuarioNome,
+            },
+            mediaAvaliacao: row.mediaAvaliacao || 0,
+            imagemReceita: row.imagem ? row.imagem.toString('base64') : null,
+        }));
+
+    } catch (error) {
+        console.error('Erro na busca avançada de receitas:', error);
+        throw error;
+    } finally {
+        conexao.release();
+    }
+}
+
 export {
     GetAllReceitas, GetReceitasByTitle, GetReceitasByUser, GetReceita, GetReceitasByCategoria,
-    UpdateReceitasPartial
+    UpdateReceitasPartial, GetReceitasBuscaAvancada
 }
