@@ -45,190 +45,251 @@
   ],
   "paths": {
     "/api/Receitas/": {
-      "get": {
-        "tags": [
-          "Receitas"
-        ],
-        "description": "Lista todas as receitas",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/Receitas/GetReceita": {
-      "get": {
-        "tags": [
-          "Receitas"
-        ],
-        "description": "Retorna a receita a partir do ID da receita informado",
-        "parameters": [
-          {
-            "name": "idReceita",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "get": {
+          "tags": [
+            "Receitas"
+          ],
+          "description": "Lista todas as receitas",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "404": {
+              "description": "Not Found"
+            },
+            "500": {
+              "description": "Internal Server Error"
             }
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
         }
-      }
-    },
-    "/api/Receitas/BuscaPorTitulo": {
-      "get": {
-        "tags": [
-          "Receitas"
-        ],
-        "description": "Busca receitas por seu título",
-        "parameters": [
-          {
-            "name": "tituloReceita",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/Receitas/BuscaPorCategoria": {
-      "get": {
-        "tags": [
-          "Receitas"
-        ],
-        "description": "Busca receitas por sua categoria",
-        "parameters": [
-          {
-            "name": "idCategoria",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/Receitas/BuscaPorUsuario": {
-      "get": {
-        "tags": [
-          "Receitas"
-        ],
-        "description": "Retorna receitas de um usuário específico",
-        "parameters": [
-          {
-            "name": "idUsuario",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/Receitas/AtualizarParcial": {
-      "patch": {
-        "tags": [
-          "Receitas"
-        ],
-        "description": "Atualiza parcialmente uma receita",
-        "parameters": [
-          {
-            "name": "idUsuario",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
+      },
+      "/api/Receitas/GetReceita": {
+        "get": {
+          "tags": [
+            "Receitas"
+          ],
+          "description": "Retorna a receita a partir do ID da receita informado",
+          "parameters": [
+            {
+              "name": "idReceita",
+              "in": "query",
               "schema": {
-                "type": "object",
-                "properties": {
-                  "idReceita": {
-                    "example": "any"
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "400": {
+              "description": "Bad Request"
+            },
+            "404": {
+              "description": "Not Found"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          }
+        }
+      },
+      "/api/Receitas/BuscaPorTitulo": {
+        "get": {
+          "tags": [
+            "Receitas"
+          ],
+          "description": "Busca receitas por seu título",
+          "parameters": [
+            {
+              "name": "tituloReceita",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "400": {
+              "description": "Bad Request"
+            },
+            "404": {
+              "description": "Not Found"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          }
+        }
+      },
+      "/api/Receitas/BuscaPorCategoria": {
+        "get": {
+          "tags": [
+            "Receitas"
+          ],
+          "description": "Busca receitas por sua categoria",
+          "parameters": [
+            {
+              "name": "idCategoria",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "400": {
+              "description": "Bad Request"
+            },
+            "404": {
+              "description": "Not Found"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          }
+        }
+      },
+      "/api/Receitas/BuscaPorUsuario": {
+        "get": {
+          "tags": [
+            "Receitas"
+          ],
+          "description": "Retorna receitas de um usuário específico",
+          "parameters": [
+            {
+              "name": "idUsuario",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "400": {
+              "description": "Bad Request"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          }
+        }
+      },
+      "/api/Receitas/AtualizarParcial": {
+        "patch": {
+          "tags": [
+            "Receitas"
+          ],
+          "description": "Atualiza parcialmente uma receita",
+          "parameters": [
+            {
+              "name": "idUsuario",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "400": {
+              "description": "Bad Request"
+            },
+            "404": {
+              "description": "Not Found"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "idReceita": {
+                      "example": "any"
+                    }
                   }
                 }
               }
             }
           }
         }
+      },
+      "/api/Receitas/BuscaAvancada": {
+  "get": {
+    "tags": ["Receitas"],
+    "description": "Busca receitas com múltiplos critérios de filtro (ingredientes, nota mínima, tempo, tipo)",
+    "parameters": [
+      {
+        "name": "ingredientes",
+        "in": "query",
+        "description": "Lista de ingredientes separados por vírgula",
+        "schema": {
+          "type": "string",
+          "example": "Alho,Cebola,Frango"
+        }
+      },
+      {
+        "name": "notaMinima",
+        "in": "query",
+        "schema": {
+          "type": "number",
+          "example": 3.5
+        }
+      },
+      {
+        "name": "tempoMinimo",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "example": 15
+        }
+      },
+      {
+        "name": "tempoMaximo",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "example": 60
+        }
+      },
+      {
+        "name": "tipo",
+        "in": "query",
+        "description": "Palavra-chave para tipo de receita (ex: Doce, Salgado)",
+        "schema": {
+          "type": "string",
+          "example": "Doce"
+        }
       }
-    },
+    ],
+    "responses": {
+      "200": {
+        "description": "Lista de receitas filtradas com sucesso"
+      },
+      "404": {
+        "description": "Nenhuma receita encontrada"
+      },
+      "500": {
+        "description": "Erro interno ao buscar receitas"
+      }
+    }
+  }
+},
     "/api/Historico": {
   "get": {
     "tags": ["Histórico"],
