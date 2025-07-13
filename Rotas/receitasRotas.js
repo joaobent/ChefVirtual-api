@@ -7,6 +7,7 @@ import {
   patchReceitas,
   getReceitasByCategoria
 } from '../controllers/receitasController.js';
+import { GetReceitasBuscaAvancada } from '../Consultas/receitas.js';
 
 const router = express.Router();
 
@@ -50,6 +51,12 @@ router.patch('/AtualizarParcial', (req, res) => {
   // #swagger.tags = ['Receitas']
   // #swagger.description = 'Atualiza parcialmente uma receita'
   patchReceitas(req, res);
+});
+
+router.get('/BuscaAvancada', (req, res) => {
+  // #swagger.tags = ['Receitas']
+  // #swagger.description = 'Busca receitas com múltiplos critérios de filtro (ingredientes, nota, tempo, tipo)'
+  GetReceitasBuscaAvancada(req, res);
 });
 
 export default router;
