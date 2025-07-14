@@ -46,11 +46,11 @@ export async function GetFavoritosUsuarioReceita(usuarioId, receitaId) {
     }
 }
 
-export async function InserirFavorito(usuarioId, receitaId) {
+export async function InserirFavorito(usuarioId, receitaId, avaliacao) {
     const conexao = await pool.getConnection()
     try {
-        const query = `INSERT INTO favoritos (usuario_id, receita_id) VALUES (?, ?)`
-        return await executaQuery(conexao, query, [usuarioId, receitaId])
+        const query = `INSERT INTO favoritos (usuario_id, receita_id, avaliacao) VALUES (?, ?, ?)`
+        return await executaQuery(conexao, query, [usuarioId, receitaId, avaliacao])
     } finally {
         conexao.release()
     }

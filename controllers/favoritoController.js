@@ -19,7 +19,7 @@ export async function listarFavoritosUsuario(req, res) {
 }
 
 export async function adicionarFavorito(req, res) {
-    const { usuarioId, receitaId } = req.body
+    const { usuarioId, receitaId, avaliacao } = req.body
     
     if ((isNaN(Number(usuarioId)) || Number(usuarioId) < 0) && ((isNaN(Number(receitaId)) || Number(receitaId) < 0)))
     {
@@ -33,7 +33,7 @@ export async function adicionarFavorito(req, res) {
         return res.status(400).json({erro: 'Já existe um registro do usuário para esta receita. Se deseja alterar o status do favorito, procure usar a rota patch'})
     }
 
-    await InserirFavorito(usuarioId, receitaId)
+    await InserirFavorito(usuarioId, receitaId, avaliacao)
     res.status(201).json({ mensagem: 'Favorito adicionado com sucesso' })
 }
 
