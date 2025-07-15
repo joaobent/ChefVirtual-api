@@ -50,7 +50,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/api/Receitas', receitasRotas); // prefixa as rotas das receitas com /api
-app.use('/api/Historico', historicoRotas);
+app.use('/api/historico', historicoRotas);
 app.use('/api/Categorias', categoriaRotas);
 app.use('/api/Comentarios', comentariosRotas);
 app.use('/api/Favoritos', favoritoRotas);
